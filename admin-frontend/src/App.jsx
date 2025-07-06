@@ -21,6 +21,7 @@ import Orders from "./pages/Orders";
 import Team from "./pages/Team";
 import Chats from "./pages/Chats";
 import Notifications from "./pages/Notifications";
+import UserStories from "./pages/UserStories";
 import Login from "./pages/Login";
 import "./App.css";
 
@@ -151,6 +152,14 @@ function App() {
                 element={
                   <AppLayout>
                     <Notifications />
+                  </AppLayout>
+                }
+              />
+              <Route
+                path="/user-stories"
+                element={
+                  <AppLayout>
+                    <UserStories />
                   </AppLayout>
                 }
               />

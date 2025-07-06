@@ -14,6 +14,7 @@ import {
   Package,
   MessageSquare,
   Bell,
+  BookOpen,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
@@ -25,6 +26,7 @@ const Sidebar = () => {
     { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { path: "/users", icon: Users, label: "Users" },
     { path: "/payments", icon: CreditCard, label: "Payments" },
+    { path: "/user-stories", icon: BookOpen, label: "User Stories" },
     { path: "/videos", icon: Play, label: "Videos" },
     { path: "/diet-plans", icon: FileText, label: "Diet Plans" },
     { path: "/products", icon: Package, label: "Products" },
