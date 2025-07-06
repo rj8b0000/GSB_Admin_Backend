@@ -26,8 +26,14 @@ const Videos = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [videosPerPage] = useState(10);
 
-  const categories = ["Meditation", "Education", "Success Stories", "Fitness"];
+  const [categories, setCategories] = useState([
+    "Meditation",
+    "Education",
+    "Success Stories",
+    "Fitness",
+  ]);
   const accessLevels = ["Free", "Paid"];
+  const [categoryForm, setCategoryForm] = useState({ name: "" });
 
   const [formData, setFormData] = useState({
     title: "",
