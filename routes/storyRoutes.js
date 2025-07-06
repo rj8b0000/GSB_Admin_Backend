@@ -13,23 +13,25 @@
 
 // module.exports = router;
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const multer = require('multer');
-const storyController = require('../controllers/StoryController');
+const multer = require("multer");
+const storyController = require("../controllers/StoryController");
 
-const uploadImage = require('../middlewares/imageUploadMiddleware');
+const uploadImage = require("../middlewares/imageUploadMiddleware");
 
 router.post(
-  '/',
+  "/",
   uploadImage, // Now supports both beforeImage and afterImage
-  storyController.addStory
+  storyController.addStory,
 );
 
 router.post(
-  '/update',
+  "/update",
   uploadImage, // For single image upload
-  storyController.dailyupdate
+  storyController.dailyupdate,
 );
+
+router.get("/", storyController.getAllStories);
 
 module.exports = router;
