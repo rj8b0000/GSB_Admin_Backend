@@ -548,6 +548,57 @@ const Videos = () => {
                 />
               </div>
 
+              <div className="form-group">
+                <label>Video File</label>
+                <input
+                  type="file"
+                  accept="video/*"
+                  onChange={(e) =>
+                    setFormData({ ...formData, videoFile: e.target.files[0] })
+                  }
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    background: "var(--input-bg)",
+                    border: "1px solid var(--border-color)",
+                    borderRadius: "8px",
+                    color: "var(--text-white)",
+                  }}
+                />
+                <small
+                  style={{ color: "var(--text-gray)", fontSize: "0.8rem" }}
+                >
+                  Optional - Upload video file or provide YouTube link above
+                </small>
+              </div>
+
+              <div className="form-group">
+                <label>Thumbnail Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      thumbnailFile: e.target.files[0],
+                    })
+                  }
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    background: "var(--input-bg)",
+                    border: "1px solid var(--border-color)",
+                    borderRadius: "8px",
+                    color: "var(--text-white)",
+                  }}
+                />
+                <small
+                  style={{ color: "var(--text-gray)", fontSize: "0.8rem" }}
+                >
+                  Optional - Upload a thumbnail image for the video
+                </small>
+              </div>
+
               <div
                 style={{
                   display: "flex",
