@@ -11,6 +11,8 @@ export default defineConfig({
     hmr: {
       port: 3001,
       host: "localhost",
+      overlay: false,
+      clientPort: 3001,
     },
     proxy: {
       "/api": {
@@ -18,6 +20,10 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+    },
+    watch: {
+      usePolling: false,
+      interval: 100,
     },
   },
 });
