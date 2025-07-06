@@ -174,13 +174,26 @@ exports.getChatById = async (req, res) => {
 // Resolve a chat
 exports.markChatResolved = async (req, res) => {
   try {
+    const { chatId } = req.params;
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(chatId)) {
+      return res.status(400).json({ message: "Invalid chat ID format" });
+    }
+
     const chat = await Chat.findByIdAndUpdate(
-      req.params.chatId,
+      chatId,
       { status: "resolved" },
       { new: true },
     );
+
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found" });
+    }
+
     res.status(200).json({ message: "Chat marked as resolved", chat });
   } catch (err) {
+    console.error("Error in markChatResolved:", err);
     res
       .status(500)
       .json({ message: "Failed to mark chat as resolved", error: err.message });
