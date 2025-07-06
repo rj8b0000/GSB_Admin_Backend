@@ -1,6 +1,6 @@
 // controllers/orderController.js
-const Order = require('../models/Order');
-const Cart = require('../models/Cart');
+const Order = require("../models/Order");
+const Cart = require("../models/Cart");
 
 exports.placeOrder = async (req, res) => {
   try {
@@ -8,10 +8,13 @@ exports.placeOrder = async (req, res) => {
 
     const cart = await Cart.findOne({ userId });
     if (!cart || !cart.items.length) {
-      return res.status(400).json({ message: 'Cart is empty' });
+      return res.status(400).json({ message: "Cart is empty" });
     }
 
-    const total = cart.items.reduce((sum, item) => sum + Number(item.price || 0), 0);
+    const total = cart.items.reduce(
+      (sum, item) => sum + Number(item.price || 0),
+      0,
+    );
 
     const order = new Order({
       userId,
@@ -24,19 +27,37 @@ exports.placeOrder = async (req, res) => {
     await order.save();
     await Cart.findOneAndDelete({ userId });
 
-    res.status(201).json({ message: 'Order placed successfully', orderId: order._id });
+    res
+      .status(201)
+      .json({ message: "Order placed successfully", orderId: order._id });
   } catch (err) {
-    res.status(500).json({ message: 'Failed to place order', error: err.message });
+    res
+      .status(500)
+      .json({ message: "Failed to place order", error: err.message });
   }
 };
-
 
 exports.getOrdersByUser = async (req, res) => {
   try {
     const { userId } = req.params;
     const orders = await Order.find({ userId }).sort({ createdAt: -1 });
-    res.status(200).json({ message: 'Orders fetched', orders });
+    res.status(200).json({ message: "Orders fetched", orders });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch orders", error: error.message });
+  }
+};
+
+exports.getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate("userId", "fullName email phoneNumber")
+      .sort({ createdAt: -1 });
+    res.status(200).json({ message: "All orders fetched", orders });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to fetch orders", error: error.message });
   }
 };
