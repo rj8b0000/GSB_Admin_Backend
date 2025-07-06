@@ -33,6 +33,8 @@ const Videos = () => {
     category: "",
     accessLevel: "Free",
     youtubeLink: "",
+    videoFile: null,
+    thumbnailFile: null,
   });
 
   useEffect(() => {
