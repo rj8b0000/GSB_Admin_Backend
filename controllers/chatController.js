@@ -152,11 +152,19 @@ exports.replyToChat = async (req, res) => {
 // Get specific chat by ID
 exports.getChatById = async (req, res) => {
   try {
-    const chat = await Chat.findById(req.params.chatId).populate("assignedTo");
+    const { chatId } = req.params;
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(chatId)) {
+      return res.status(400).json({ message: "Invalid chat ID format" });
+    }
+
+    const chat = await Chat.findById(chatId).populate("assignedTo");
     if (!chat) return res.status(404).json({ message: "Chat not found" });
 
     res.status(200).json(chat);
   } catch (err) {
+    console.error("Error in getChatById:", err);
     res
       .status(500)
       .json({ message: "Error fetching chat", error: err.message });
