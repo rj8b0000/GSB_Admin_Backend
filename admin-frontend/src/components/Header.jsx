@@ -7,6 +7,7 @@ import { useTheme } from "../context/ThemeContext";
 const Header = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const getPageTitle = () => {
     const titles = {
