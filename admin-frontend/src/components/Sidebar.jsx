@@ -7,7 +7,7 @@ import {
   Calendar,
   Stethoscope,
   ShoppingCart,
-  UserTie,
+  UserCheck,
   LogOut,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
