@@ -239,6 +239,17 @@ const Videos = () => {
             <Plus size={16} />
             Add Video
           </button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => {
+              setEditingCategory(null);
+              setCategoryForm({ name: "" });
+              setShowCategoryModal(true);
+            }}
+          >
+            <Edit size={16} />
+            Manage Categories
+          </button>
           <button className="btn btn-secondary" onClick={loadVideos}>
             <RefreshCw size={16} />
             Refresh
