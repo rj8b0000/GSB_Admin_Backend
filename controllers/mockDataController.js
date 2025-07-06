@@ -7,6 +7,9 @@ const Chat = require("../models/Chat");
 const Notification = require("../models/Notification");
 const Payment = require("../models/Payment");
 const DailyUpdate = require("../models/DailyUpdate");
+const Story = require("../models/Story");
+const Consultation = require("../models/Consultation");
+const Order = require("../models/Order");
 
 exports.addMockData = async (req, res) => {
   try {
@@ -377,6 +380,242 @@ exports.addMockData = async (req, res) => {
         imageUrl:
           "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/yoga1.jpg",
       },
+      {
+        user: mockUsers[2]._id,
+        title: "Post-Workout Meal",
+        description:
+          "Prepared a high-protein meal after my strength training session.",
+        imageUrl:
+          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/meal1.jpg",
+      },
+      {
+        user: mockUsers[4]._id,
+        title: "Weekly Progress Photo",
+        description:
+          "Seeing great improvements in my muscle definition after 6 weeks.",
+        imageUrl:
+          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/progress1.jpg",
+      },
+    ]);
+
+    // Add mock user stories
+    await Story.insertMany([
+      {
+        user: mockUsers[0]._id,
+        title: "My 20kg Weight Loss Journey",
+        description:
+          "After 6 months of following GSB programs, I lost 20kg and gained confidence. The diet plans and workout videos were game changers for me.",
+        beforeImageUrl:
+          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before1.jpg",
+        afterImageUrl:
+          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after1.jpg",
+      },
+      {
+        user: mockUsers[1]._id,
+        title: "From Skinny to Strong",
+        description:
+          "I gained 15kg of lean muscle mass in 8 months. The nutrition guidance and workout plans helped me achieve my dream physique.",
+        beforeImageUrl:
+          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before2.jpg",
+        afterImageUrl:
+          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after2.jpg",
+      },
+      {
+        user: mockUsers[3]._id,
+        title: "Transformation After Pregnancy",
+        description:
+          "Lost 25kg post-pregnancy with GSB's safe and effective programs. Now I'm stronger than ever before!",
+        beforeImageUrl:
+          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before3.jpg",
+        afterImageUrl:
+          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after3.jpg",
+      },
+      {
+        user: mockUsers[4]._id,
+        title: "Overcoming Lifestyle Diseases",
+        description:
+          "Reversed my diabetes and high blood pressure through proper diet and exercise. GSB saved my life!",
+        beforeImageUrl:
+          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before4.jpg",
+        afterImageUrl:
+          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after4.jpg",
+      },
+    ]);
+
+    // Add mock consultations
+    await Consultation.insertMany([
+      {
+        firstName: "Rahul",
+        lastName: "Sharma",
+        email: "rahul.sharma@example.com",
+        phoneNumber: "+919876543220",
+        message:
+          "I want to lose 15kg in 4 months. What diet and exercise plan would you recommend?",
+        status: "pending",
+        assignedTo: mockTeamMembers[0]._id,
+      },
+      {
+        firstName: "Anita",
+        lastName: "Patel",
+        email: "anita.patel@example.com",
+        phoneNumber: "+919876543221",
+        message:
+          "I'm a beginner and want to start my fitness journey. Need guidance on where to start.",
+        status: "in-progress",
+        assignedTo: mockTeamMembers[1]._id,
+      },
+      {
+        firstName: "Sanjay",
+        lastName: "Kumar",
+        email: "sanjay.kumar@example.com",
+        phoneNumber: "+919876543222",
+        message:
+          "I have diabetes and high blood pressure. Can you help me with a safe workout routine?",
+        status: "completed",
+        assignedTo: mockTeamMembers[0]._id,
+      },
+      {
+        firstName: "Priya",
+        lastName: "Reddy",
+        email: "priya.reddy@example.com",
+        phoneNumber: "+919876543223",
+        message:
+          "I want to build muscle mass. I'm currently 55kg and want to reach 65kg.",
+        status: "pending",
+      },
+      {
+        firstName: "Amit",
+        lastName: "Singh",
+        email: "amit.singh@example.com",
+        phoneNumber: "+919876543224",
+        message:
+          "Post-pregnancy weight loss guidance needed. I gained 20kg during pregnancy.",
+        status: "in-progress",
+        assignedTo: mockTeamMembers[2]._id,
+      },
+    ]);
+
+    // Add mock orders
+    await Order.insertMany([
+      {
+        userId: mockUsers[0]._id,
+        items: [
+          {
+            productId: "whey-protein-001",
+            name: "Whey Protein Powder",
+            price: 2499,
+            quantity: 2,
+          },
+          {
+            productId: "multivitamin-001",
+            name: "Multivitamin Tablets",
+            price: 1499,
+            quantity: 1,
+          },
+        ],
+        contactInfo: {
+          name: "Raj Patel",
+          phone: "+919876543210",
+          address: "123 MG Road, Mumbai, Maharashtra 400001",
+        },
+        paymentMethod: "UPI",
+        total: 6497,
+        status: "delivered",
+      },
+      {
+        userId: mockUsers[1]._id,
+        items: [
+          {
+            productId: "bcaa-001",
+            name: "BCAA Energy Drink",
+            price: 1999,
+            quantity: 3,
+          },
+        ],
+        contactInfo: {
+          name: "Priya Sharma",
+          phone: "+919876543211",
+          address: "456 Park Street, Kolkata, West Bengal 700016",
+        },
+        paymentMethod: "Credit Card",
+        total: 5997,
+        status: "shipped",
+      },
+      {
+        userId: mockUsers[2]._id,
+        items: [
+          {
+            productId: "omega3-001",
+            name: "Omega-3 Fish Oil",
+            price: 1799,
+            quantity: 1,
+          },
+          {
+            productId: "whey-protein-001",
+            name: "Whey Protein Powder",
+            price: 2499,
+            quantity: 1,
+          },
+        ],
+        contactInfo: {
+          name: "Arjun Singh",
+          phone: "+919876543212",
+          address: "789 Brigade Road, Bangalore, Karnataka 560025",
+        },
+        paymentMethod: "Bank Transfer",
+        total: 4298,
+        status: "pending",
+      },
+      {
+        userId: mockUsers[3]._id,
+        items: [
+          {
+            productId: "multivitamin-001",
+            name: "Multivitamin Tablets",
+            price: 1499,
+            quantity: 2,
+          },
+        ],
+        contactInfo: {
+          name: "Neha Gupta",
+          phone: "+919876543213",
+          address: "321 CP Market, New Delhi, Delhi 110001",
+        },
+        paymentMethod: "UPI",
+        total: 2998,
+        status: "delivered",
+      },
+      {
+        userId: mockUsers[4]._id,
+        items: [
+          {
+            productId: "whey-protein-001",
+            name: "Whey Protein Powder",
+            price: 2499,
+            quantity: 1,
+          },
+          {
+            productId: "bcaa-001",
+            name: "BCAA Energy Drink",
+            price: 1999,
+            quantity: 2,
+          },
+          {
+            productId: "omega3-001",
+            name: "Omega-3 Fish Oil",
+            price: 1799,
+            quantity: 1,
+          },
+        ],
+        contactInfo: {
+          name: "Vikram Yadav",
+          phone: "+919876543214",
+          address: "654 FC Road, Pune, Maharashtra 411005",
+        },
+        paymentMethod: "Credit Card",
+        total: 8296,
+        status: "shipped",
+      },
     ]);
 
     res.status(200).json({
@@ -390,7 +629,10 @@ exports.addMockData = async (req, res) => {
         chats: 4,
         notifications: 4,
         payments: 3,
-        dailyUpdates: 3,
+        dailyUpdates: 5,
+        stories: 4,
+        consultations: 5,
+        orders: 5,
       },
     });
   } catch (error) {
