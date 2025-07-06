@@ -157,6 +157,11 @@ const Chats = () => {
     return <div className="loading">Loading chats...</div>;
   }
 
+  // Show chat interface if a chat is selected
+  if (showChatInterface && selectedChatId) {
+    return <ChatInterface chatId={selectedChatId} onBack={handleBackToList} />;
+  }
+
   return (
     <div className="page-container">
       <div className="page-header">
