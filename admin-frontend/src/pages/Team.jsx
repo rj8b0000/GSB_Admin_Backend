@@ -21,6 +21,14 @@ const Team = () => {
   const [editingMember, setEditingMember] = useState(null);
   const [editingDepartment, setEditingDepartment] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [departments, setDepartments] = useState([
+    "Customer Support",
+    "Technical Support",
+    "Sales",
+    "Marketing",
+    "Management",
+  ]);
+  const [departmentForm, setDepartmentForm] = useState({ name: "" });
 
   const [formData, setFormData] = useState({
     fullName: "",
