@@ -115,6 +115,37 @@ const Team = () => {
     }
   };
 
+  // Department Management Functions
+  const handleAddDepartment = () => {
+    if (departmentForm.name && !departments.includes(departmentForm.name)) {
+      setDepartments([...departments, departmentForm.name]);
+      setDepartmentForm({ name: "" });
+      setShowDepartmentModal(false);
+    }
+  };
+
+  const handleEditDepartment = (oldDepartment) => {
+    if (departmentForm.name && !departments.includes(departmentForm.name)) {
+      const updatedDepartments = departments.map((dept) =>
+        dept === oldDepartment ? departmentForm.name : dept,
+      );
+      setDepartments(updatedDepartments);
+      setDepartmentForm({ name: "" });
+      setEditingDepartment(null);
+      setShowDepartmentModal(false);
+    }
+  };
+
+  const handleDeleteDepartment = (departmentToDelete) => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete the department "${departmentToDelete}"?`,
+      )
+    ) {
+      setDepartments(departments.filter((dept) => dept !== departmentToDelete));
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading team members...</div>;
   }
