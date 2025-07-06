@@ -1,0 +1,45 @@
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { Menu, UserCircle } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+
+const Header = () => {
+  const location = useLocation();
+  const { user } = useAuth();
+
+  const getPageTitle = () => {
+    const titles = {
+      "/": "Dashboard",
+      "/dashboard": "Dashboard",
+      "/users": "Users Management",
+      "/payments": "Payment Analytics",
+      "/daily-updates": "Daily Updates",
+      "/consultations": "Consultations",
+      "/orders": "Orders",
+      "/team": "Team Management",
+    };
+
+    return titles[location.pathname] || "Dashboard";
+  };
+
+  return (
+    <header className="header">
+      <div className="header-left">
+        <button className="sidebar-toggle">
+          <Menu size={20} />
+        </button>
+        <h1 className="page-title">{getPageTitle()}</h1>
+      </div>
+      <div className="header-right">
+        <div className="user-info">
+          <span>Welcome, Admin</span>
+          <div className="user-avatar">
+            <UserCircle size={32} />
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
