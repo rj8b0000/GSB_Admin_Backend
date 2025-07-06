@@ -19,7 +19,9 @@ const Chats = () => {
   const [filteredChats, setFilteredChats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showChatInterface, setShowChatInterface] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [selectedChatId, setSelectedChatId] = useState(null);
   const [statusFilter, setStatusFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [assignedFilter, setAssignedFilter] = useState("");
