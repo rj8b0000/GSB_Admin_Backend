@@ -116,6 +116,8 @@ const Videos = () => {
         category: "",
         accessLevel: "Free",
         youtubeLink: "",
+        videoFile: null,
+        thumbnailFile: null,
       });
       loadVideos();
     } catch (error) {
