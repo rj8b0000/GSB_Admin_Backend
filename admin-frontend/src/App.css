@@ -4,15 +4,33 @@
   --secondary-gold: #ffd700;
   --dark-gold: #b8860b;
   --light-gold: #f5e6a0;
+  --accent-green: #22c55e;
+  --accent-yellow: #fbbf24;
+  --accent-red: #ef4444;
+}
+
+/* Dark Theme (Default) */
+.dark-theme {
   --background-dark: #1a1a1a;
   --background-light: #2a2a2a;
   --text-white: #ffffff;
   --text-gray: #cccccc;
-  --accent-green: #22c55e;
-  --accent-yellow: #fbbf24;
-  --accent-red: #ef4444;
   --border-color: #404040;
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --card-bg: #2a2a2a;
+  --input-bg: #1a1a1a;
+}
+
+/* Light Theme */
+.light-theme {
+  --background-dark: #f8f9fa;
+  --background-light: #ffffff;
+  --text-white: #1a1a1a;
+  --text-gray: #6c757d;
+  --border-color: #dee2e6;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --card-bg: #ffffff;
+  --input-bg: #f8f9fa;
 }
 
 * {
