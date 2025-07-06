@@ -143,9 +143,26 @@ const Users = () => {
                     <strong>{user.score || 0}</strong>
                   </td>
                   <td>
-                    <span className={`flag-badge ${getFlagClass(user.flag)}`}>
-                      {(user.flag || "red").toUpperCase()}
-                    </span>
+                    <select
+                      value={user.flag || "red"}
+                      onChange={(e) =>
+                        handleUpdateFlag(user._id, e.target.value)
+                      }
+                      className={`flag-badge ${getFlagClass(user.flag)}`}
+                      style={{
+                        padding: "4px 8px",
+                        background: "var(--input-bg)",
+                        border: "1px solid var(--border-color)",
+                        borderRadius: "4px",
+                        color: "var(--text-white)",
+                        fontSize: "0.8rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <option value="green">GREEN</option>
+                      <option value="yellow">YELLOW</option>
+                      <option value="red">RED</option>
+                    </select>
                   </td>
                   <td>{user.goal || "N/A"}</td>
                   <td>{user.age || "N/A"}</td>
