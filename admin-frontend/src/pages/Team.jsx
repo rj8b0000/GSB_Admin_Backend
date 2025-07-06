@@ -345,13 +345,11 @@ const Team = () => {
 
               <div className="form-group">
                 <label>Department</label>
-                <input
-                  type="text"
+                <select
                   value={formData.department}
                   onChange={(e) =>
                     setFormData({ ...formData, department: e.target.value })
                   }
-                  placeholder="e.g., Customer Support, Sales, Technical"
                   style={{
                     width: "100%",
                     padding: "12px",
@@ -360,7 +358,14 @@ const Team = () => {
                     borderRadius: "8px",
                     color: "var(--text-white)",
                   }}
-                />
+                >
+                  <option value="">Select Department</option>
+                  {departments.map((dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {!editingMember && (
