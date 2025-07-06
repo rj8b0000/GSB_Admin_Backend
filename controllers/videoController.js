@@ -1,5 +1,6 @@
 const Video = require("../models/Video");
-const { uploadFileToS3 } = require("../services/s3Uploader");
+// Use mock S3 uploader for development
+const { uploadFileToS3 } = require("../services/mockS3Uploader");
 
 // exports.uploadVideo = async (req, res) => {
 //   try {
@@ -32,16 +33,24 @@ const { uploadFileToS3 } = require("../services/s3Uploader");
 
 exports.uploadVideo = async (req, res) => {
   try {
-    const { title, description, category, accessLevel , youtubeLink} = req.body;
+    const { title, description, category, accessLevel, youtubeLink } = req.body;
     const videoFile = req.files?.video?.[0];
     const thumbnailFile = req.files?.thumbnail?.[0];
 
-    if (!videoFile) {
-      return res.status(400).json({ message: "Video file is required" });
+    // Video file is required only if no YouTube link is provided
+    if (!videoFile && !youtubeLink) {
+      return res
+        .status(400)
+        .json({ message: "Either video file or YouTube link is required" });
     }
 
-    const videoUrl = await uploadFileToS3(videoFile, "videos");
-    const thumbnailUrl = thumbnailFile ? await uploadFileToS3(thumbnailFile, "thumbnails") : null;
+    // Upload files using mock S3 service for development
+    const videoUrl = videoFile
+      ? await uploadFileToS3(videoFile, "videos")
+      : null;
+    const thumbnailUrl = thumbnailFile
+      ? await uploadFileToS3(thumbnailFile, "thumbnails")
+      : null;
 
     const videoDoc = await Video.create({
       title,
@@ -50,7 +59,7 @@ exports.uploadVideo = async (req, res) => {
       accessLevel,
       videoUrl,
       thumbnailUrl,
-      youtubeLink
+      youtubeLink,
     });
 
     res.status(201).json({ message: "Video uploaded", video: videoDoc });
@@ -66,7 +75,9 @@ exports.getAllVideos = async (req, res) => {
     res.status(200).json({ videos });
   } catch (error) {
     console.error("Error fetching videos:", error);
-    res.status(500).json({ message: "Failed to fetch videos", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch videos", error: error.message });
   }
 };
 
@@ -80,9 +91,13 @@ exports.deleteVideo = async (req, res) => {
       return res.status(404).json({ message: "Video not found" });
     }
 
-    res.status(200).json({ message: "Video deleted successfully", video: deletedVideo });
+    res
+      .status(200)
+      .json({ message: "Video deleted successfully", video: deletedVideo });
   } catch (error) {
     console.error("Error deleting video:", error);
-    res.status(500).json({ message: "Failed to delete video", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to delete video", error: error.message });
   }
 };

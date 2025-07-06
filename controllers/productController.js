@@ -1,8 +1,8 @@
-const Product = require('../models/Product');
+const Product = require("../models/Product");
 
-const { uploadFileToS3 } = require("../services/s3Uploader");
+const { uploadFileToS3 } = require("../services/mockS3Uploader");
 // controllers/cartController.js
-const Cart = require('../models/Cart');
+const Cart = require("../models/Cart");
 
 const isJSONString = (value) => {
   try {
@@ -15,9 +15,7 @@ const isJSONString = (value) => {
 
 exports.createProduct = async (req, res) => {
   try {
-    const {
-      name,  description, price, stock,  ingredients, benefits
-    } = req.body;
+    const { name, description, price, stock, ingredients, benefits } = req.body;
 
     let imageUrl = null;
     if (req.file) {
@@ -35,7 +33,8 @@ exports.createProduct = async (req, res) => {
 
       stock,
       imageUrl,
-      status: stock === 0 ? "Out of Stock" : stock < 10 ? "Low Stock" : "In Stock",
+      status:
+        stock === 0 ? "Out of Stock" : stock < 10 ? "Low Stock" : "In Stock",
       ingredients: isJSONString(ingredients),
       benefits: isJSONString(benefits),
     });
@@ -51,13 +50,16 @@ exports.createProduct = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 }); // newest first
-    res.status(200).json({ message: "Products fetched successfully", products });
+    res
+      .status(200)
+      .json({ message: "Products fetched successfully", products });
   } catch (err) {
     console.error("Error fetching products:", err);
-    res.status(500).json({ message: "Failed to fetch products", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch products", error: err.message });
   }
 };
-
 
 exports.deleteProduct = async (req, res) => {
   try {
@@ -68,10 +70,16 @@ exports.deleteProduct = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    res.status(200).json({ message: "Product deleted successfully", product: deletedProduct });
+    res
+      .status(200)
+      .json({
+        message: "Product deleted successfully",
+        product: deletedProduct,
+      });
   } catch (err) {
     console.error("Error deleting product:", err);
-    res.status(500).json({ message: "Failed to delete product", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Failed to delete product", error: err.message });
   }
 };
-

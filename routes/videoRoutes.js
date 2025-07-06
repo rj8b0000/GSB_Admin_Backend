@@ -4,7 +4,6 @@
 // const videoController = require("../controllers/videoController");
 // const { verifyToken } = require("../middlewares/authMiddleware");
 
-
 // const storage = multer.memoryStorage();
 // const upload = multer({ storage });
 
@@ -23,7 +22,14 @@ const router = express.Router();
 const videoController = require("../controllers/videoController");
 const videoUpload = require("../middlewares/videouploadMiddleware"); // path to the above file
 
-router.post("/upload", videoUpload, videoController.uploadVideo);
+// GET routes (no middleware needed)
+router.get("/", videoController.getAllVideos);
 router.get("/all-videos", videoController.getAllVideos);
+
+// POST routes (with upload middleware)
+router.post("/", videoUpload, videoController.uploadVideo);
+router.post("/upload", videoUpload, videoController.uploadVideo);
+
+// DELETE routes
 router.delete("/:id", videoController.deleteVideo);
 module.exports = router;

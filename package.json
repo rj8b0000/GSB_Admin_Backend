@@ -4,7 +4,11 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node start-fullstack.js",
+    "frontend": "cd admin-frontend && npm run dev",
+    "fullstack": "npm run dev",
+    "add-mock-data": "node add-mock-data.js"
   },
   "keywords": [],
   "author": "",

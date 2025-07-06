@@ -3,12 +3,13 @@ const router = express.Router();
 const productController = require("../controllers/productController");
 const uploadImage = require("../middlewares/imageUploadMiddleware");
 
-router.post("/products", uploadImage, productController.createProduct);
+// GET routes
+router.get("/", productController.getAllProducts);
 
-router.get('/products', productController.getAllProducts);
+// POST routes (with upload middleware)
+router.post("/", uploadImage, productController.createProduct);
 
-
-router.delete('/products/:id', productController.deleteProduct);
+// DELETE routes
+router.delete("/:id", productController.deleteProduct);
 
 module.exports = router;
-
