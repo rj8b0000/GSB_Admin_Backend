@@ -7,6 +7,7 @@ const userController = require("../controllers/userController");
 const uploadImage = require("../middlewares/imageUploadMiddleware");
 
 router.post("/login", loginAdmin);
+router.post("/admin/login", loginAdmin);
 // router.post('/add-member', addTeamMember);
 
 router.post("/send-otp", authController.sendOTP);
