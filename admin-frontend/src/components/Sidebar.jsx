@@ -25,10 +25,15 @@ const Sidebar = () => {
     { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { path: "/users", icon: Users, label: "Users" },
     { path: "/payments", icon: CreditCard, label: "Payments" },
+    { path: "/videos", icon: Play, label: "Videos" },
+    { path: "/diet-plans", icon: FileText, label: "Diet Plans" },
+    { path: "/products", icon: Package, label: "Products" },
+    { path: "/team", icon: UserCheck, label: "Team" },
+    { path: "/chats", icon: MessageSquare, label: "Chats" },
+    { path: "/notifications", icon: Bell, label: "Notifications" },
     { path: "/daily-updates", icon: Calendar, label: "Daily Updates" },
     { path: "/consultations", icon: Stethoscope, label: "Consultations" },
     { path: "/orders", icon: ShoppingCart, label: "Orders" },
-    { path: "/team", icon: UserCheck, label: "Team" },
   ];
 
   const handleLogout = () => {
