@@ -81,6 +81,30 @@ function App() {
                 }
               />
               <Route
+                path="/videos"
+                element={
+                  <AppLayout>
+                    <Videos />
+                  </AppLayout>
+                }
+              />
+              <Route
+                path="/diet-plans"
+                element={
+                  <AppLayout>
+                    <DietPlans />
+                  </AppLayout>
+                }
+              />
+              <Route
+                path="/products"
+                element={
+                  <AppLayout>
+                    <Products />
+                  </AppLayout>
+                }
+              />
+              <Route
                 path="/daily-updates"
                 element={
                   <AppLayout>
