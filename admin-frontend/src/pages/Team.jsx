@@ -415,6 +415,143 @@ const Team = () => {
         </div>
       )}
 
+      {/* Department Management Modal */}
+      {showDepartmentModal && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.7)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              background: "var(--card-bg)",
+              padding: "30px",
+              borderRadius: "12px",
+              width: "90%",
+              maxWidth: "500px",
+              border: "1px solid var(--border-color)",
+              maxHeight: "80vh",
+              overflowY: "auto",
+            }}
+          >
+            <h2 style={{ color: "var(--primary-gold)", marginBottom: "20px" }}>
+              Manage Departments
+            </h2>
+
+            {/* Add/Edit Department Form */}
+            <div style={{ marginBottom: "30px" }}>
+              <div className="form-group">
+                <label>
+                  {editingDepartment ? "Edit Department" : "Add New Department"}
+                </label>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <input
+                    type="text"
+                    value={departmentForm.name}
+                    onChange={(e) =>
+                      setDepartmentForm({ name: e.target.value })
+                    }
+                    placeholder="Department name"
+                    style={{
+                      flex: 1,
+                      padding: "12px",
+                      background: "var(--input-bg)",
+                      border: "1px solid var(--border-color)",
+                      borderRadius: "8px",
+                      color: "var(--text-white)",
+                    }}
+                  />
+                  <button
+                    onClick={() =>
+                      editingDepartment
+                        ? handleEditDepartment(editingDepartment)
+                        : handleAddDepartment()
+                    }
+                    className="btn btn-primary"
+                    disabled={!departmentForm.name.trim()}
+                  >
+                    {editingDepartment ? "Update" : "Add"}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Departments List */}
+            <div style={{ marginBottom: "20px" }}>
+              <h3 style={{ color: "var(--text-white)", marginBottom: "15px" }}>
+                Existing Departments
+              </h3>
+              <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                {departments.map((dept, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "10px",
+                      background: "var(--background-dark)",
+                      border: "1px solid var(--border-color)",
+                      borderRadius: "6px",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <span style={{ color: "var(--text-white)" }}>{dept}</span>
+                    <div style={{ display: "flex", gap: "5px" }}>
+                      <button
+                        onClick={() => {
+                          setEditingDepartment(dept);
+                          setDepartmentForm({ name: dept });
+                        }}
+                        className="action-btn btn-edit"
+                        style={{ fontSize: "0.8rem", padding: "4px 8px" }}
+                      >
+                        <Edit size={12} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteDepartment(dept)}
+                        className="action-btn btn-delete"
+                        style={{ fontSize: "0.8rem", padding: "4px 8px" }}
+                      >
+                        <Trash2 size={12} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                justifyContent: "flex-end",
+              }}
+            >
+              <button
+                onClick={() => {
+                  setShowDepartmentModal(false);
+                  setEditingDepartment(null);
+                  setDepartmentForm({ name: "" });
+                }}
+                className="btn btn-secondary"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Team Stats */}
       <div className="stats-grid" style={{ marginTop: "30px" }}>
         <div className="stat-card">
