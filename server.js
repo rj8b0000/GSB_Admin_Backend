@@ -6,7 +6,22 @@ const dotenv = require("dotenv");
 const { connectDB } = require("./config/db");
 const app = express();
 
-connectDB();
+// Connect to database (non-blocking)
+connectDB()
+  .then((dbConnected) => {
+    if (dbConnected) {
+      console.log("🚀 Server starting with database connection");
+    } else {
+      console.log("⚠️  Server starting WITHOUT database connection");
+      console.log(
+        "🔧 Database-dependent features will not work until MongoDB is connected",
+      );
+    }
+  })
+  .catch((err) => {
+    console.error("Database connection error:", err);
+  });
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
