@@ -167,6 +167,37 @@ const Videos = () => {
     }
   };
 
+  // Category Management Functions
+  const handleAddCategory = () => {
+    if (categoryForm.name && !categories.includes(categoryForm.name)) {
+      setCategories([...categories, categoryForm.name]);
+      setCategoryForm({ name: "" });
+      setShowCategoryModal(false);
+    }
+  };
+
+  const handleEditCategory = (oldCategory) => {
+    if (categoryForm.name && !categories.includes(categoryForm.name)) {
+      const updatedCategories = categories.map((cat) =>
+        cat === oldCategory ? categoryForm.name : cat,
+      );
+      setCategories(updatedCategories);
+      setCategoryForm({ name: "" });
+      setEditingCategory(null);
+      setShowCategoryModal(false);
+    }
+  };
+
+  const handleDeleteCategory = (categoryToDelete) => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete the category "${categoryToDelete}"?`,
+      )
+    ) {
+      setCategories(categories.filter((cat) => cat !== categoryToDelete));
+    }
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString();
   };
