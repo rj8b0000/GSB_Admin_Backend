@@ -12,8 +12,6 @@ app.use(express.json());
 app.use(express.static("public"));
 dotenv.config();
 
-mongoose.connect(process.env.MONGODB_URI);
-
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const storyRoutes = require("./routes/storyRoutes");
