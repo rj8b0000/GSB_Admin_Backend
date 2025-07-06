@@ -19,6 +19,8 @@ import DailyUpdates from "./pages/DailyUpdates";
 import Consultations from "./pages/Consultations";
 import Orders from "./pages/Orders";
 import Team from "./pages/Team";
+import Chats from "./pages/Chats";
+import Notifications from "./pages/Notifications";
 import Login from "./pages/Login";
 import "./App.css";
 
