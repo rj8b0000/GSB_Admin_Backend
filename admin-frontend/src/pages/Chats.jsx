@@ -111,6 +111,17 @@ const Chats = () => {
     }
   };
 
+  const handleViewChat = (chatId) => {
+    setSelectedChatId(chatId);
+    setShowChatInterface(true);
+  };
+
+  const handleBackToList = () => {
+    setShowChatInterface(false);
+    setSelectedChatId(null);
+    loadChats(); // Refresh the chats list
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
