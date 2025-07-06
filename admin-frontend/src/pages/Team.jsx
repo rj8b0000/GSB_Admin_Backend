@@ -17,7 +17,9 @@ const Team = () => {
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showDepartmentModal, setShowDepartmentModal] = useState(false);
   const [editingMember, setEditingMember] = useState(null);
+  const [editingDepartment, setEditingDepartment] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const [formData, setFormData] = useState({
