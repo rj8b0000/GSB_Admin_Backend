@@ -1,5 +1,6 @@
 const Video = require("../models/Video");
-const { uploadFileToS3 } = require("../services/s3Uploader");
+// Use mock S3 uploader for development
+const { uploadFileToS3 } = require("../services/mockS3Uploader");
 
 // exports.uploadVideo = async (req, res) => {
 //   try {
