@@ -68,6 +68,24 @@ const Users = () => {
     alert("User edit functionality will be implemented");
   };
 
+  const handleUpdateFlag = async (userId, newFlag) => {
+    try {
+      // In a real implementation, you'd call an API to update the user flag
+      // For now, we'll update it locally
+      const updatedUsers = users.map((user) =>
+        user._id === userId ? { ...user, flag: newFlag } : user,
+      );
+      setUsers(updatedUsers);
+      setFilteredUsers(updatedUsers);
+
+      // Here you would make an API call like:
+      // await axios.put(`${API_BASE}/user/${userId}/flag`, { flag: newFlag });
+    } catch (error) {
+      console.error("Error updating user flag:", error);
+      alert("Error updating user flag. Please try again.");
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading users...</div>;
   }
