@@ -290,7 +290,7 @@ body {
 }
 
 .chart-card {
-  background: var(--background-light);
+  background: var(--card-bg);
   padding: 25px;
   border-radius: 12px;
   border: 1px solid var(--border-color);
