@@ -47,6 +47,7 @@ const cartRoutes = require("./routes/cartRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const dailyUpdateRoutes = require("./routes/dailyUpdateRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const mockDataRoutes = require("./routes/mockDataRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
