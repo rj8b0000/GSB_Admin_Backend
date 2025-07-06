@@ -134,6 +134,8 @@ const Videos = () => {
       category: video.category,
       accessLevel: video.accessLevel,
       youtubeLink: video.youtubeLink || "",
+      videoFile: null,
+      thumbnailFile: null,
     });
     setShowModal(true);
   };
