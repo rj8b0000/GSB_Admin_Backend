@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const DailyUpdate = require("../models/DailyUpdate");
-const { uploadFileToS3 } = require("../services/s3Uploader");
+const { uploadFileToS3 } = require("../services/mockS3Uploader");
 
 exports.createUser = async (req, res) => {
   try {
