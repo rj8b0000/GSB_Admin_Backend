@@ -41,6 +41,7 @@ app.use("/api/consultancy", consultantRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/payments", paymentRoutes);
 
 app.listen(3000, "0.0.0.0", () => {
   console.log("Server running on port 3000");
