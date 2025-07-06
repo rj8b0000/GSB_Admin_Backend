@@ -1,7 +1,8 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Menu, UserCircle } from "lucide-react";
+import { Menu, UserCircle, Moon, Sun } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 const Header = () => {
   const location = useLocation();
