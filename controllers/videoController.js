@@ -44,30 +44,13 @@ exports.uploadVideo = async (req, res) => {
         .json({ message: "Either video file or YouTube link is required" });
     }
 
-    let videoUrl = null;
-    let thumbnailUrl = null;
-
-    // Try to upload files to S3, but continue if S3 is not configured
-    try {
-      if (videoFile) {
-        videoUrl = await uploadFileToS3(videoFile, "videos");
-      }
-      if (thumbnailFile) {
-        thumbnailUrl = await uploadFileToS3(thumbnailFile, "thumbnails");
-      }
-    } catch (s3Error) {
-      console.warn(
-        "S3 upload failed, continuing without file URLs:",
-        s3Error.message,
-      );
-      // In development, we can continue without actual file uploads
-      if (videoFile) {
-        videoUrl = `https://demo-bucket.s3.amazonaws.com/videos/${videoFile.originalname}`;
-      }
-      if (thumbnailFile) {
-        thumbnailUrl = `https://demo-bucket.s3.amazonaws.com/thumbnails/${thumbnailFile.originalname}`;
-      }
-    }
+    // Upload files using mock S3 service for development
+    const videoUrl = videoFile
+      ? await uploadFileToS3(videoFile, "videos")
+      : null;
+    const thumbnailUrl = thumbnailFile
+      ? await uploadFileToS3(thumbnailFile, "thumbnails")
+      : null;
 
     const videoDoc = await Video.create({
       title,
