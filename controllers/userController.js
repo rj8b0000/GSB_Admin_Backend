@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const DailyUpdate = require("../models/DailyUpdate");
 const { uploadFileToS3 } = require("../services/s3Uploader");
 
 exports.createUser = async (req, res) => {
@@ -48,7 +49,7 @@ exports.updateUser = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       id,
       { $set: updateData },
-      { new: true, runValidators: true } // Return updated document and validate schema
+      { new: true, runValidators: true }, // Return updated document and validate schema
     );
 
     if (!user) {
