@@ -120,10 +120,20 @@ exports.replyToChat = async (req, res) => {
   const { text, agentId } = req.body;
 
   try {
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(chatId)) {
+      return res.status(400).json({ message: "Invalid chat ID format" });
+    }
+
+    // Validate required fields
+    if (!text || text.trim() === "") {
+      return res.status(400).json({ message: "Message text is required" });
+    }
+
     const chat = await Chat.findById(chatId);
     if (!chat) return res.status(404).json({ message: "Chat not found" });
 
-    chat.messages.push({ sender: "agent", text });
+    chat.messages.push({ sender: "agent", text: text.trim() });
 
     // Only update assignedTo if agentId is provided
     if (agentId) {
@@ -134,6 +144,7 @@ exports.replyToChat = async (req, res) => {
 
     res.status(200).json(chat);
   } catch (err) {
+    console.error("Error in replyToChat:", err);
     res.status(500).json({ message: "Reply failed", error: err.message });
   }
 };
