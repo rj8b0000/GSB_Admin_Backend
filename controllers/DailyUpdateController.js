@@ -33,3 +33,19 @@ exports.addDailyUpdate = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getAllDailyUpdates = async (req, res) => {
+  try {
+    const dailyUpdates = await DailyUpdate.find()
+      .populate("user", "fullName email")
+      .sort({ createdAt: -1 });
+    res.status(200).json({
+      message: "Daily updates fetched successfully",
+      dailyUpdates,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to fetch daily updates", error: error.message });
+  }
+};

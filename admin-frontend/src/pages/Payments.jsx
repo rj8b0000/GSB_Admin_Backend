@@ -1,48 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { RefreshCw, TrendingUp, Smartphone, Globe, User } from "lucide-react";
+import { RefreshCw, TrendingUp, Users, ShoppingCart } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
 const Payments = () => {
   const { API_BASE } = useAuth();
   const [payments, setPayments] = useState([]);
-  const [analytics, setAnalytics] = useState({});
-  const [filteredPayments, setFilteredPayments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sourceFilter, setSourceFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
 
   useEffect(() => {
     loadPayments();
   }, []);
 
-  useEffect(() => {
-    // Filter payments when filter changes
-    if (sourceFilter) {
-      setFilteredPayments(
-        payments.filter((payment) => payment.source === sourceFilter),
-      );
-    } else {
-      setFilteredPayments(payments);
-    }
-  }, [payments, sourceFilter]);
-
   const loadPayments = async () => {
     try {
       setLoading(true);
-      const [paymentsResponse, analyticsResponse] = await Promise.all([
-        axios.get(`${API_BASE}/payments`),
-        axios.get(`${API_BASE}/payments/analytics`),
-      ]);
-
-      setPayments(paymentsResponse.data.payments || []);
-      setFilteredPayments(paymentsResponse.data.payments || []);
-      setAnalytics(analyticsResponse.data.analytics || {});
+      const response = await axios.get(`${API_BASE}/payments`);
+      setPayments(response.data.payments || []);
     } catch (error) {
       console.error("Error loading payments:", error);
     } finally {
       setLoading(false);
     }
   };
+
+  // Filter payments by category (subscription vs order payments)
+  const subscriptionPayments = payments.filter(
+    (p) =>
+      p.subscriptionType ||
+      p.type === "subscription" ||
+      p.category === "subscription",
+  );
+
+  const orderPayments = payments.filter(
+    (p) => p.orderId || p.type === "order" || p.category === "order",
+  );
+
+  const filteredPayments =
+    categoryFilter === "subscription"
+      ? subscriptionPayments
+      : categoryFilter === "order"
+        ? orderPayments
+        : payments;
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-IN", {
@@ -57,35 +57,10 @@ const Payments = () => {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
   };
 
-  const getSourceIcon = (source) => {
-    switch (source?.toLowerCase()) {
-      case "app":
-        return <Smartphone size={16} />;
-      case "web":
-        return <Globe size={16} />;
-      case "manual":
-        return <User size={16} />;
-      default:
-        return <User size={16} />;
-    }
-  };
-
-  const getSourceClass = (source) => {
-    switch (source?.toLowerCase()) {
-      case "app":
-        return "flag-green";
-      case "web":
-        return "flag-yellow";
-      case "manual":
-        return "flag-red";
-      default:
-        return "flag-red";
-    }
-  };
-
   const getStatusClass = (status) => {
     switch (status?.toLowerCase()) {
       case "completed":
+      case "success":
         return "flag-green";
       case "pending":
         return "flag-yellow";
@@ -96,11 +71,19 @@ const Payments = () => {
     }
   };
 
+  const subscriptionRevenue = subscriptionPayments.reduce(
+    (sum, p) => sum + (p.amount || 0),
+    0,
+  );
+  const orderRevenue = orderPayments.reduce(
+    (sum, p) => sum + (p.amount || 0),
+    0,
+  );
+  const totalRevenue = subscriptionRevenue + orderRevenue;
+
   if (loading) {
     return <div className="loading">Loading payments...</div>;
   }
-
-  const paymentSources = analytics.paymentSources || {};
 
   return (
     <div className="page-container">
@@ -108,13 +91,12 @@ const Payments = () => {
         <h1 className="page-title-main">Payment Analytics</h1>
         <div className="filter-controls">
           <select
-            value={sourceFilter}
-            onChange={(e) => setSourceFilter(e.target.value)}
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
           >
-            <option value="">All Sources</option>
-            <option value="app">App</option>
-            <option value="web">Web</option>
-            <option value="manual">Manual</option>
+            <option value="">All Categories</option>
+            <option value="subscription">Subscription Payments</option>
+            <option value="order">Order Payments</option>
           </select>
           <button className="btn btn-primary" onClick={loadPayments}>
             <RefreshCw size={16} />
@@ -123,33 +105,30 @@ const Payments = () => {
         </div>
       </div>
 
-      {/* Payment Source Statistics */}
+      {/* Payment Categories - Only Two */}
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon">
-            <Smartphone />
+            <Users />
           </div>
           <div className="stat-content">
-            <h3>{paymentSources.app || 0}</h3>
-            <p>App Payments</p>
+            <h3>{subscriptionPayments.length}</h3>
+            <p>Subscription Payments</p>
+            <div style={{ fontSize: "0.9rem", color: "#999" }}>
+              {formatCurrency(subscriptionRevenue)}
+            </div>
           </div>
         </div>
         <div className="stat-card">
           <div className="stat-icon">
-            <Globe />
+            <ShoppingCart />
           </div>
           <div className="stat-content">
-            <h3>{paymentSources.web || 0}</h3>
-            <p>Web Payments</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon">
-            <User />
-          </div>
-          <div className="stat-content">
-            <h3>{paymentSources.manual || 0}</h3>
-            <p>Manual Payments</p>
+            <h3>{orderPayments.length}</h3>
+            <p>Order Payments</p>
+            <div style={{ fontSize: "0.9rem", color: "#999" }}>
+              {formatCurrency(orderRevenue)}
+            </div>
           </div>
         </div>
         <div className="stat-card">
@@ -157,27 +136,28 @@ const Payments = () => {
             <TrendingUp />
           </div>
           <div className="stat-content">
-            <h3>{formatCurrency(analytics.totalRevenue || 0)}</h3>
+            <h3>{formatCurrency(totalRevenue)}</h3>
             <p>Total Revenue</p>
+            <div style={{ fontSize: "0.9rem", color: "#999" }}>
+              {payments.length} payments
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Subscription Types */}
-      <div className="chart-card" style={{ marginBottom: "30px" }}>
-        <h3>Subscription Types</h3>
-        <div className="stats-grid">
-          <div className="stat-content">
-            <h3>{analytics.subscriptionTypes?.monthly || 0}</h3>
-            <p>Monthly Subscriptions</p>
+        <div className="stat-card">
+          <div className="stat-icon">
+            <TrendingUp />
           </div>
           <div className="stat-content">
-            <h3>{analytics.subscriptionTypes?.yearly || 0}</h3>
-            <p>Yearly Subscriptions</p>
-          </div>
-          <div className="stat-content">
-            <h3>{analytics.subscriptionTypes?.lifetime || 0}</h3>
-            <p>Lifetime Subscriptions</p>
+            <h3>{payments.filter((p) => p.status === "completed").length}</h3>
+            <p>Successful Payments</p>
+            <div style={{ fontSize: "0.9rem", color: "#999" }}>
+              {(
+                (payments.filter((p) => p.status === "completed").length /
+                  payments.length) *
+                100
+              ).toFixed(1)}
+              % success rate
+            </div>
           </div>
         </div>
       </div>
@@ -189,9 +169,8 @@ const Payments = () => {
             <tr>
               <th>User</th>
               <th>Amount</th>
-              <th>Method</th>
               <th>Type</th>
-              <th>Source</th>
+              <th>Method</th>
               <th>Transaction ID</th>
               <th>Date</th>
               <th>Status</th>
@@ -200,36 +179,45 @@ const Payments = () => {
           <tbody>
             {filteredPayments.length === 0 ? (
               <tr>
-                <td colSpan="8" style={{ textAlign: "center" }}>
+                <td colSpan="7" style={{ textAlign: "center" }}>
                   No payments found
                 </td>
               </tr>
             ) : (
               filteredPayments.map((payment) => (
                 <tr key={payment._id}>
-                  <td>{payment.user?.fullName || "Unknown User"}</td>
+                  <td>
+                    <strong>{payment.user?.fullName || "Unknown User"}</strong>
+                    <br />
+                    <span className="email-text">{payment.user?.email}</span>
+                  </td>
                   <td>
                     <strong>{formatCurrency(payment.amount)}</strong>
                   </td>
-                  <td>{payment.paymentMethod}</td>
-                  <td>{payment.subscriptionType}</td>
                   <td>
                     <span
-                      className={`flag-badge ${getSourceClass(payment.source)}`}
+                      className={`flag-badge ${payment.subscriptionType ? "flag-blue" : "flag-orange"}`}
                     >
-                      {getSourceIcon(payment.source)}
-                      {payment.source?.toUpperCase()}
+                      {payment.subscriptionType ? "SUBSCRIPTION" : "ORDER"}
                     </span>
+                    {payment.subscriptionType && (
+                      <div style={{ fontSize: "0.8rem", color: "#999" }}>
+                        {payment.subscriptionType}
+                      </div>
+                    )}
                   </td>
+                  <td>{payment.paymentMethod}</td>
                   <td style={{ fontFamily: "monospace", fontSize: "0.8rem" }}>
                     {payment.transactionId}
                   </td>
-                  <td>{formatDate(payment.paymentDate)}</td>
+                  <td>
+                    {formatDate(payment.paymentDate || payment.createdAt)}
+                  </td>
                   <td>
                     <span
                       className={`flag-badge ${getStatusClass(payment.status)}`}
                     >
-                      {payment.status?.toUpperCase()}
+                      {payment.status?.toUpperCase() || "PENDING"}
                     </span>
                   </td>
                 </tr>
@@ -238,23 +226,6 @@ const Payments = () => {
           </tbody>
         </table>
       </div>
-
-      {/* Revenue by Source */}
-      {analytics.revenueBySource && analytics.revenueBySource.length > 0 && (
-        <div className="chart-card" style={{ marginTop: "30px" }}>
-          <h3>Revenue by Source</h3>
-          <div className="stats-grid">
-            {analytics.revenueBySource.map((source) => (
-              <div key={source._id} className="stat-content">
-                <h3>{formatCurrency(source.total)}</h3>
-                <p>
-                  {source._id?.toUpperCase()} ({source.count} payments)
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

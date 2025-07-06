@@ -75,3 +75,19 @@ exports.dailyupdate = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getAllStories = async (req, res) => {
+  try {
+    const stories = await Story.find()
+      .populate("user", "fullName email")
+      .sort({ createdAt: -1 });
+    res.status(200).json({
+      message: "Stories fetched successfully",
+      stories,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to fetch stories", error: error.message });
+  }
+};
