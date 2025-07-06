@@ -39,3 +39,28 @@ exports.getNotifications = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// DELETE /api/notifications/:id - Delete notification
+exports.deleteNotification = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(400)
+        .json({ message: "Invalid notification ID format" });
+    }
+
+    const notification = await Notification.findByIdAndDelete(id);
+
+    if (!notification) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    res.status(200).json({ message: "Notification deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting notification:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
