@@ -6,9 +6,11 @@ import {
   Clock,
   CheckCircle,
   UserCheck,
+  Eye,
 } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import ChatInterface from "./ChatInterface";
 
 const Chats = () => {
   const { API_BASE } = useAuth();
