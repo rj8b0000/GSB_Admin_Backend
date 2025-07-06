@@ -80,6 +80,13 @@ const Videos = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate that either video file or YouTube link is provided
+    if (!formData.videoFile && !formData.youtubeLink) {
+      alert("Please provide either a video file or YouTube link");
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
 
