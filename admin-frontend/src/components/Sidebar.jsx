@@ -9,6 +9,11 @@ import {
   ShoppingCart,
   UserCheck,
   LogOut,
+  Play,
+  FileText,
+  Package,
+  MessageSquare,
+  Bell,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
