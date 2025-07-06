@@ -1,14 +1,20 @@
-const Story = require('../models/Story');
-const {uploadFileToS3} = require('../services/s3Uploader');
+const Story = require("../models/Story");
+const { uploadFileToS3 } = require("../services/mockS3Uploader");
 
 exports.addStory = async (req, res) => {
   try {
     const { title, description } = req.body;
-    const beforeImage = req.files['beforeImage'] ? req.files['beforeImage'][0] : null;
-    const afterImage = req.files['afterImage'] ? req.files['afterImage'][0] : null;
+    const beforeImage = req.files["beforeImage"]
+      ? req.files["beforeImage"][0]
+      : null;
+    const afterImage = req.files["afterImage"]
+      ? req.files["afterImage"][0]
+      : null;
 
     if (!beforeImage || !afterImage) {
-      return res.status(400).json({ error: 'Both before and after images are required.' });
+      return res
+        .status(400)
+        .json({ error: "Both before and after images are required." });
     }
 
     // Upload images to S3
@@ -25,7 +31,7 @@ exports.addStory = async (req, res) => {
     // });
 
     res.status(201).json({
-      message: 'Story added!',
+      message: "Story added!",
       title,
       description,
       beforeImageUrl,
@@ -40,10 +46,11 @@ exports.addStory = async (req, res) => {
 exports.dailyupdate = async (req, res) => {
   try {
     const { title, description } = req.body;
-    const image = req.files && req.files['image'] ? req.files['image'][0] : null;
+    const image =
+      req.files && req.files["image"] ? req.files["image"][0] : null;
 
     if (!image) {
-      return res.status(400).json({ error: 'Image is required.' });
+      return res.status(400).json({ error: "Image is required." });
     }
 
     // Upload image to S3
@@ -58,7 +65,7 @@ exports.dailyupdate = async (req, res) => {
     // });
 
     res.status(201).json({
-      message: 'Story added!',
+      message: "Story added!",
       title,
       description,
       imageUrl,
