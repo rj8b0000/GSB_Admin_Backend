@@ -17,8 +17,15 @@ const connectDB = async () => {
     console.error("   1. MongoDB Atlas IP whitelist includes your current IP");
     console.error("   2. Database user credentials are correct");
     console.error("   3. Network connectivity to MongoDB Atlas");
-    process.exit(1);
+    console.error(
+      "⚠️  Server will continue running without database connection",
+    );
+    console.error("📝 Fix the MongoDB issue and restart the server");
+
+    // Don't exit, let server continue running
+    return false;
   }
+  return true;
 };
 
 module.exports = { connectDB };
