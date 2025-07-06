@@ -23,7 +23,7 @@ const Sidebar = () => {
     { path: "/daily-updates", icon: Calendar, label: "Daily Updates" },
     { path: "/consultations", icon: Stethoscope, label: "Consultations" },
     { path: "/orders", icon: ShoppingCart, label: "Orders" },
-    { path: "/team", icon: UserTie, label: "Team" },
+    { path: "/team", icon: UserCheck, label: "Team" },
   ];
 
   const handleLogout = () => {
