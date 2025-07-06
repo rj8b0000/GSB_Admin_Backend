@@ -378,10 +378,18 @@ const Chats = () => {
             </div>
 
             {/* Actions */}
-            <div style={{ display: "flex", gap: "8px" }}>
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+              <button
+                className="btn btn-primary"
+                onClick={() => handleViewChat(chat._id)}
+                style={{ fontSize: "0.8rem", padding: "6px 12px" }}
+              >
+                <Eye size={14} />
+                View Chat
+              </button>
               {!chat.assignedTo && (
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-secondary"
                   onClick={() => {
                     setSelectedChat(chat);
                     setShowAssignModal(true);
