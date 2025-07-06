@@ -82,9 +82,21 @@ const Videos = () => {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
-      Object.keys(formData).forEach((key) => {
-        formDataToSend.append(key, formData[key]);
-      });
+
+      // Add text fields
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("category", formData.category);
+      formDataToSend.append("accessLevel", formData.accessLevel);
+      formDataToSend.append("youtubeLink", formData.youtubeLink);
+
+      // Add files if selected
+      if (formData.videoFile) {
+        formDataToSend.append("video", formData.videoFile);
+      }
+      if (formData.thumbnailFile) {
+        formDataToSend.append("thumbnail", formData.thumbnailFile);
+      }
 
       if (editingVideo) {
         // Update video (you'll need to implement this endpoint)
