@@ -22,7 +22,13 @@ connectDB()
     console.error("Database connection error:", err);
   });
 
-app.use(cors());
+// CORS configuration for React frontend
+app.use(
+  cors({
+    origin: ["http://localhost:3001", "http://127.0.0.1:3001"],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(express.static("public"));
 dotenv.config();
