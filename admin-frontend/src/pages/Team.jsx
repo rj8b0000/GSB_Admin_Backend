@@ -170,6 +170,17 @@ const Team = () => {
             <Plus size={16} />
             Add Team Member
           </button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => {
+              setEditingDepartment(null);
+              setDepartmentForm({ name: "" });
+              setShowDepartmentModal(true);
+            }}
+          >
+            <Edit size={16} />
+            Manage Departments
+          </button>
           <button className="btn btn-secondary" onClick={loadTeamMembers}>
             <RefreshCw size={16} />
             Refresh
