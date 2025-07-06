@@ -138,6 +138,22 @@ function App() {
                   </AppLayout>
                 }
               />
+              <Route
+                path="/chats"
+                element={
+                  <AppLayout>
+                    <Chats />
+                  </AppLayout>
+                }
+              />
+              <Route
+                path="/notifications"
+                element={
+                  <AppLayout>
+                    <Notifications />
+                  </AppLayout>
+                }
+              />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </div>
