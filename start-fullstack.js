@@ -21,7 +21,7 @@ backend.stderr.on("data", (data) => {
 // Wait a bit for backend to start, then start frontend
 setTimeout(() => {
   console.log("⚛️  Starting React frontend on port 3001...");
-  const frontend = spawn("npm", ["run", "dev"], {
+  const frontend = spawn("npm", ["run", "dev", "--", "--host", "0.0.0.0"], {
     stdio: "pipe",
     cwd: path.join(__dirname, "admin-frontend"),
     shell: true,
