@@ -182,6 +182,8 @@ const Videos = () => {
                 category: "",
                 accessLevel: "Free",
                 youtubeLink: "",
+                videoFile: null,
+                thumbnailFile: null,
               });
               setShowModal(true);
             }}
