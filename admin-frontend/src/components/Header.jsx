@@ -33,6 +33,13 @@ const Header = () => {
         <h1 className="page-title">{getPageTitle()}</h1>
       </div>
       <div className="header-right">
+        <button
+          onClick={toggleTheme}
+          className="sidebar-toggle"
+          title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        >
+          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
         <div className="user-info">
           <span>Welcome, Admin</span>
           <div className="user-avatar">
