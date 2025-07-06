@@ -63,6 +63,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/mock", mockDataRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {
