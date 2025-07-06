@@ -135,8 +135,8 @@ exports.replyToChat = async (req, res) => {
 
     chat.messages.push({ sender: "agent", text: text.trim() });
 
-    // Only update assignedTo if agentId is provided
-    if (agentId) {
+    // Only update assignedTo if agentId is provided and is a valid ObjectId
+    if (agentId && mongoose.Types.ObjectId.isValid(agentId)) {
       chat.assignedTo = agentId;
     }
 
