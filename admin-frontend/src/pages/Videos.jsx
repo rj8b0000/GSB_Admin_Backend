@@ -27,6 +27,8 @@ const Videos = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [videosPerPage] = useState(10);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
   const accessLevels = ["Free", "Paid"];
   const [categoryForm, setCategoryForm] = useState({
     name: "",
@@ -159,24 +161,30 @@ const Videos = () => {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
 
+      setIsUploading(true);
+      setUploadProgress(0);
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total,
+          );
+          setUploadProgress(progress);
+        },
+      };
+
       if (editingVideo) {
         await axios.put(
           `${API_BASE}/videos/${editingVideo._id}`,
           formDataToSend,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          },
+          config,
         );
       } else {
-        await axios.post(`${API_BASE}/videos`, formDataToSend, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        await axios.post(`${API_BASE}/videos`, formDataToSend, config);
       }
 
       setShowModal(false);
@@ -197,6 +205,9 @@ const Videos = () => {
         error.response?.data?.message ||
           "Error saving video. Please try again.",
       );
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
     }
   };
 
