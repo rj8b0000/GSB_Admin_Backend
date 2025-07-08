@@ -8,6 +8,10 @@ const {
 } = require("../controllers/orderController");
 
 router.post("/place-order", placeOrder);
+router.put(
+  "/:orderId/status",
+  require("../controllers/orderController").updateOrderStatus,
+);
 
 router.get("/user/:userId", getOrdersByUser);
 router.get("/", getAllOrders);

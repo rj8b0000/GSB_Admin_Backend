@@ -61,3 +61,31 @@ exports.getAllOrders = async (req, res) => {
       .json({ message: "Failed to fetch orders", error: error.message });
   }
 };
+
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ["pending", "shipped", "delivered", "cancelled"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true },
+    ).populate("userId", "fullName email phoneNumber");
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({ message: "Order status updated", order });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to update order status", error: error.message });
+  }
+};
