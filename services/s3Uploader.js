@@ -145,8 +145,6 @@ module.exports = { uploadFileToS3 };
 //   }
 // };
 
-const { DeleteObjectCommand } = require("@aws-sdk/client-s3");
-
 const deleteFileFromS3 = async (fileUrl) => {
   if (!fileUrl) {
     console.log("No file URL provided for deletion; skipping.");
