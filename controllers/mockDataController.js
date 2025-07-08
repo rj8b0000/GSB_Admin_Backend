@@ -78,8 +78,7 @@ exports.addMockData = async (req, res) => {
         category: "Meditation",
         accessLevel: "Free",
         youtubeLink: "https://youtube.com/watch?v=example1",
-        thumbnailUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/thumbnails/meditation1.jpg",
+        thumbnailUrl: null,
       },
       {
         title: "Advanced Strength Training",
@@ -88,8 +87,7 @@ exports.addMockData = async (req, res) => {
         category: "Fitness",
         accessLevel: "Paid",
         youtubeLink: "https://youtube.com/watch?v=example2",
-        videoUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/videos/strength.mp4",
+        videoUrl: null,
       },
       {
         title: "Nutrition Basics",
@@ -121,23 +119,19 @@ exports.addMockData = async (req, res) => {
         title: "7-Day Weight Loss Diet Plan",
         description:
           "A comprehensive 7-day meal plan designed for healthy weight loss.",
-        pdfUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/diet-plans/weight-loss-7-day.pdf",
-        thumbnailUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/thumbnails/diet1.jpg",
+        pdfUrl: null,
+        thumbnailUrl: null,
       },
       {
         title: "Muscle Building Nutrition Guide",
         description:
           "Complete nutrition guide for muscle building and strength training.",
-        pdfUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/diet-plans/muscle-building.pdf",
+        pdfUrl: null,
       },
       {
         title: "Vegetarian Fitness Diet",
         description: "Plant-based diet plan for fitness enthusiasts.",
-        pdfUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/diet-plans/vegetarian.pdf",
+        pdfUrl: null,
       },
       {
         title: "Post-Workout Recovery Meals",
