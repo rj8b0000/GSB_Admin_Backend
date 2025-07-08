@@ -167,6 +167,10 @@ const DailyUpdates = () => {
                             borderRadius: "4px",
                           }}
                           onError={(e) => {
+                            console.error(
+                              "Failed to load daily update image:",
+                              update.imageUrl,
+                            );
                             e.target.style.display = "none";
                             e.target.nextSibling.style.display = "flex";
                           }}
