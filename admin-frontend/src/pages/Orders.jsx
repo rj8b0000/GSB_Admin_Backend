@@ -48,6 +48,19 @@ const Orders = () => {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
   };
 
+  // Calculate statistics
+  const totalOrders = orders.length;
+  const totalRevenue = orders.reduce(
+    (sum, order) => sum + (order.total || 0),
+    0,
+  );
+  const pendingOrders = orders.filter(
+    (order) => order.status === "pending",
+  ).length;
+  const completedOrders = orders.filter(
+    (order) => order.status === "delivered",
+  ).length;
+
   const getStatusClass = (status) => {
     switch (status?.toLowerCase()) {
       case "delivered":
