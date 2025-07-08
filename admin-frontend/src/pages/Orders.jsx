@@ -213,11 +213,25 @@ const Orders = () => {
                   </td>
                   <td>{order.paymentMethod}</td>
                   <td>
-                    <span
-                      className={`flag-badge ${getStatusClass(order.status)}`}
+                    <select
+                      value={order.status || "pending"}
+                      onChange={(e) =>
+                        updateOrderStatus(order._id, e.target.value)
+                      }
+                      style={{
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        border: "1px solid var(--border-color)",
+                        backgroundColor: "var(--input-bg)",
+                        color: "var(--text-white)",
+                        fontSize: "0.8rem",
+                      }}
                     >
-                      {order.status?.toUpperCase() || "PENDING"}
-                    </span>
+                      <option value="pending">PENDING</option>
+                      <option value="shipped">SHIPPED</option>
+                      <option value="delivered">DELIVERED</option>
+                      <option value="cancelled">CANCELLED</option>
+                    </select>
                   </td>
                   <td>{formatDate(order.createdAt)}</td>
                 </tr>
