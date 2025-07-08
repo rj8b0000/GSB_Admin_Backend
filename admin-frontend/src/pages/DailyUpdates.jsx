@@ -140,16 +140,44 @@ const DailyUpdates = () => {
                   </td>
                   <td>
                     {update.imageUrl ? (
-                      <img
-                        src={update.imageUrl}
-                        alt="Daily update"
+                      <div
                         style={{
+                          position: "relative",
                           width: "50px",
                           height: "50px",
-                          objectFit: "cover",
-                          borderRadius: "4px",
                         }}
-                      />
+                      >
+                        <img
+                          src={update.imageUrl}
+                          alt="Daily update"
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            objectFit: "cover",
+                            borderRadius: "4px",
+                          }}
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                            e.target.nextSibling.style.display = "flex";
+                          }}
+                        />
+                        <div
+                          style={{
+                            display: "none",
+                            width: "50px",
+                            height: "50px",
+                            backgroundColor: "#333",
+                            color: "#999",
+                            fontSize: "10px",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "4px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Failed to load
+                        </div>
+                      </div>
                     ) : (
                       <span style={{ color: "#999" }}>No image</span>
                     )}
