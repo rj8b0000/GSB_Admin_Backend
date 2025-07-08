@@ -188,11 +188,24 @@ const Dashboard = () => {
 
   const doughnutOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
+        position: "bottom",
         labels: {
           color: "#ffffff",
+          padding: 20,
+          font: {
+            size: 12,
+          },
         },
+      },
+      tooltip: {
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        titleColor: "#ffffff",
+        bodyColor: "#ffffff",
+        borderColor: "#D4AF37",
+        borderWidth: 1,
       },
     },
   };
