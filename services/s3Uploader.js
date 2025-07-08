@@ -61,7 +61,7 @@
 
 // V2
 
-const { PutObjectCommand } = require("@aws-sdk/client-s3");
+const { PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 const s3 = require("../utils/S3Client");
