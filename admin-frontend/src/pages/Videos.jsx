@@ -559,9 +559,23 @@ const Videos = () => {
                     display: "inline-flex",
                     alignItems: "center",
                   }}
+                  title="Play on YouTube"
                 >
                   <Play size={14} />
                 </a>
+              )}
+              {video.videoUrl && (
+                <button
+                  onClick={() => window.open(video.videoUrl, "_blank")}
+                  className="action-btn btn-view"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                  }}
+                  title="Play uploaded video"
+                >
+                  <Play size={14} />
+                </button>
               )}
             </div>
           </div>
