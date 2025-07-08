@@ -352,38 +352,33 @@ exports.addMockData = async (req, res) => {
         user: mockUsers[0]._id,
         title: "Morning Workout Complete",
         description: "Completed 45 minutes of cardio and strength training.",
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/workout1.jpg",
+        imageUrl: null,
       },
       {
         user: mockUsers[1]._id,
         title: "Healthy Breakfast",
         description: "Started the day with oats, fruits, and protein shake.",
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/breakfast1.jpg",
+        imageUrl: null,
       },
       {
         user: mockUsers[3]._id,
         title: "Evening Yoga Session",
         description: "Relaxing yoga session to end the day peacefully.",
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/yoga1.jpg",
+        imageUrl: null,
       },
       {
         user: mockUsers[2]._id,
         title: "Post-Workout Meal",
         description:
           "Prepared a high-protein meal after my strength training session.",
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/meal1.jpg",
+        imageUrl: null,
       },
       {
         user: mockUsers[4]._id,
         title: "Weekly Progress Photo",
         description:
           "Seeing great improvements in my muscle definition after 6 weeks.",
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/progress1.jpg",
+        imageUrl: null,
       },
     ]);
 
