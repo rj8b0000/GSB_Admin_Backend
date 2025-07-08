@@ -145,29 +145,31 @@ module.exports = { uploadFileToS3 };
 //   }
 // };
 
-// const deleteFileFromS3 = async (fileUrl) => {
-//   if (!fileUrl) {
-//     console.log("No file URL provided for deletion; skipping.");
-//     return;
-//   }
+const { DeleteObjectCommand } = require("@aws-sdk/client-s3");
 
-//   try {
-//     const url = new URL(fileUrl);
-//     const key = decodeURIComponent(url.pathname.slice(1)); // Remove leading '/'
+const deleteFileFromS3 = async (fileUrl) => {
+  if (!fileUrl) {
+    console.log("No file URL provided for deletion; skipping.");
+    return;
+  }
 
-//     console.log(`Deleting file from S3: ${key}`);
+  try {
+    const url = new URL(fileUrl);
+    const key = decodeURIComponent(url.pathname.slice(1)); // Remove leading '/'
 
-//     const command = new DeleteObjectCommand({
-//       Bucket: process.env.S3_BUCKET_NAME,
-//       Key: key,
-//     });
+    console.log(`Deleting file from S3: ${key}`);
 
-//     await s3.send(command);
-//     console.log(`Deletion successful: ${key}`);
-//   } catch (err) {
-//     console.error("S3 Deletion Error:", err);
-//     throw new Error(`Failed to delete file from S3: ${err.message}`);
-//   }
-// };
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: key,
+    });
 
-// module.exports = { uploadFileToS3, deleteFileFromS3 };
+    await s3.send(command);
+    console.log(`Deletion successful: ${key}`);
+  } catch (err) {
+    console.error("S3 Deletion Error:", err);
+    throw new Error(`Failed to delete file from S3: ${err.message}`);
+  }
+};
+
+module.exports = { uploadFileToS3, deleteFileFromS3 };
