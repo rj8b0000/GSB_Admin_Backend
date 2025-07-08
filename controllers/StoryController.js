@@ -1,5 +1,5 @@
 const Story = require("../models/Story");
-const { uploadFileToS3 } = require("../services/mockS3Uploader");
+const { uploadFileToS3 } = require("../services/s3Uploader");
 
 exports.addStory = async (req, res) => {
   try {

@@ -1,8 +1,5 @@
 const DailyUpdate = require("../models/DailyUpdate");
-const {
-  uploadFileToS3,
-  deleteFileFromS3,
-} = require("../services/mockS3Uploader");
+const { uploadFileToS3, deleteFileFromS3 } = require("../services/s3Uploader");
 
 exports.addDailyUpdate = async (req, res) => {
   try {
@@ -34,7 +31,7 @@ exports.addDailyUpdate = async (req, res) => {
     // Populate user details in the response
     const populatedUpdate = await DailyUpdate.populate(
       "user",
-      "fullName email"
+      "fullName email",
     );
 
     res.status(201).json({
@@ -96,7 +93,7 @@ exports.updateDailyUpdate = async (req, res) => {
     const dailyUpdate = await DailyUpdate.findByIdAndUpdate(
       id,
       { $set: updateData },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).populate("user", "fullName email");
 
     if (!BlaiseUpdate) {
