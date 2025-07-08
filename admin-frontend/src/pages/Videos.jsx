@@ -55,13 +55,13 @@ const Videos = () => {
       filtered = filtered.filter(
         (video) =>
           video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          video.description?.toLowerCase().includes(searchTerm.toLowerCase())
+          video.description?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     if (categoryFilter) {
       filtered = filtered.filter(
-        (video) => video.category.categoryId === categoryFilter
+        (video) => video.category.categoryId === categoryFilter,
       );
     }
 
@@ -74,8 +74,8 @@ const Videos = () => {
       filtered = [...filtered].sort((a, b) => {
         let aValue, bValue;
         if (sortConfig.key === "category") {
-          aValue = a.category.name || "";
-          bValue = b.category.name || "";
+          aValue = a.category?.name || "";
+          bValue = b.category?.name || "";
         } else if (sortConfig.key === "createdAt") {
           aValue = new Date(a.createdAt).getTime();
           bValue = new Date(b.createdAt).getTime();
@@ -110,7 +110,7 @@ const Videos = () => {
       console.error("Error loading videos:", error);
       alert(
         error.response?.data?.message ||
-          "Failed to load videos. Please try again."
+          "Failed to load videos. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -127,7 +127,7 @@ const Videos = () => {
       console.error("Error loading categories:", error);
       alert(
         error.response?.data?.message ||
-          "Failed to load categories. Please try again."
+          "Failed to load categories. Please try again.",
       );
     }
   };
@@ -168,7 +168,7 @@ const Videos = () => {
               Authorization: `Bearer ${token}`,
               "Content-Type": "multipart/form-data",
             },
-          }
+          },
         );
       } else {
         await axios.post(`${API_BASE}/videos`, formDataToSend, {
@@ -194,7 +194,8 @@ const Videos = () => {
     } catch (error) {
       console.error("Error saving video:", error);
       alert(
-        error.response?.data?.message || "Error saving video. Please try again."
+        error.response?.data?.message ||
+          "Error saving video. Please try again.",
       );
     }
   };
@@ -224,7 +225,7 @@ const Videos = () => {
         console.error("Error deleting video:", error);
         alert(
           error.response?.data?.message ||
-            "Error deleting video. Please try again."
+            "Error deleting video. Please try again.",
         );
       }
     }
@@ -242,7 +243,7 @@ const Videos = () => {
         await axios.put(
           `${API_BASE}/video-categories/update/${editingCategory.categoryId}`,
           payload,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
       } else {
         await axios.post(`${API_BASE}/video-categories/add`, payload, {
@@ -258,7 +259,7 @@ const Videos = () => {
       console.error("Error saving category:", error);
       alert(
         error.response?.data?.message ||
-          "Error saving category. Please try again."
+          "Error saving category. Please try again.",
       );
     }
   };
@@ -270,14 +271,14 @@ const Videos = () => {
           `${API_BASE}/video-categories/delete/${categoryId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
         loadCategories();
       } catch (error) {
         console.error("Error deleting category:", error);
         alert(
           error.response?.data?.message ||
-            "Error deleting category. Please try again."
+            "Error deleting category. Please try again.",
         );
       }
     }
@@ -300,7 +301,7 @@ const Videos = () => {
   const indexOfFirstVideo = indexOfLastVideo - videosPerPage;
   const currentVideos = filteredVideos.slice(
     indexOfFirstVideo,
-    indexOfLastVideo
+    indexOfLastVideo,
   );
   const totalPages = Math.ceil(filteredVideos.length / videosPerPage);
 
