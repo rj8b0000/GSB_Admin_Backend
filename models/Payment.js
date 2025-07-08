@@ -18,10 +18,16 @@ const paymentSchema = new mongoose.Schema(
       required: true,
     },
     source: { type: String, enum: ["app", "web", "manual"], default: "app" },
+    paymentType: {
+      type: String,
+      enum: ["subscription", "product"],
+      required: true,
+      default: "subscription",
+    },
     description: { type: String },
     paymentDate: { type: Date, default: Date.now },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Payment", paymentSchema);
