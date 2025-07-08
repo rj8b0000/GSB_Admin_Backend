@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const DailyUpdateSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "TeamMember",
+    ref: "User",
     required: false,
   },
   title: {
