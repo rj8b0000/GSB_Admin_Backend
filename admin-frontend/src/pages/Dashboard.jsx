@@ -19,7 +19,7 @@ ChartJS.register(
   Legend,
   CategoryScale,
   LinearScale,
-  BarElement,
+  BarElement
 );
 
 const Dashboard = () => {
@@ -55,7 +55,7 @@ const Dashboard = () => {
       const users = response.data.users || [];
 
       const greenFlagUsers = users.filter(
-        (user) => user.flag === "green",
+        (user) => user.flag === "green"
       ).length;
 
       setStats((prev) => ({
@@ -99,11 +99,11 @@ const Dashboard = () => {
       // Prepare payment source chart data
       const sources = analytics.paymentSources || {};
       setPaymentData({
-        labels: ["App", "Web", "Manual"],
+        labels: ["Subscriptions", "Products"],
         datasets: [
           {
-            data: [sources.app || 0, sources.web || 0, sources.manual || 0],
-            backgroundColor: ["#D4AF37", "#FFD700", "#B8860B"],
+            data: [sources.app || 0, sources.web],
+            backgroundColor: ["#D4AF37", "#FFD700"],
             borderWidth: 0,
           },
         ],
@@ -242,7 +242,7 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="chart-card">
+      {/* <div className="chart-card">
         <h3>Recent Activity</h3>
         <div style={{ padding: "20px", color: "#cccccc" }}>
           <p>• New user registered - {new Date().toLocaleTimeString()}</p>
@@ -255,7 +255,7 @@ const Dashboard = () => {
             {new Date(Date.now() - 600000).toLocaleTimeString()}
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

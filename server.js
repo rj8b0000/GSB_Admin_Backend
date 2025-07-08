@@ -49,6 +49,7 @@ const dailyUpdateRoutes = require("./routes/dailyUpdateRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const mockDataRoutes = require("./routes/mockDataRoutes");
 const departmentRoutes = require("./routes/departmentRoutes");
+const videoCategoryRoutes = require("./routes/videoCategoryRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
@@ -66,6 +67,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/mock", mockDataRoutes);
 app.use("/api/dept", departmentRoutes);
+app.use("/api/video-categories", videoCategoryRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {

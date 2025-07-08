@@ -85,47 +85,47 @@ async function addMockData() {
     console.log("✅ Added mock users");
 
     // Add mock videos
-    await Video.insertMany([
-      {
-        title: "Morning Meditation for Beginners",
-        description:
-          "A peaceful 10-minute morning meditation session to start your day right.",
-        category: "Meditation",
-        accessLevel: "Free",
-        youtubeLink: "https://youtube.com/watch?v=example1",
-      },
-      {
-        title: "Advanced Strength Training",
-        description:
-          "High-intensity strength training workout for experienced athletes.",
-        category: "Fitness",
-        accessLevel: "Paid",
-        youtubeLink: "https://youtube.com/watch?v=example2",
-      },
-      {
-        title: "Nutrition Basics",
-        description:
-          "Learn the fundamentals of proper nutrition for health and fitness.",
-        category: "Education",
-        accessLevel: "Free",
-        youtubeLink: "https://youtube.com/watch?v=example3",
-      },
-      {
-        title: "Success Story: 50kg Weight Loss",
-        description: "Inspiring story of transformation and dedication.",
-        category: "Success Stories",
-        accessLevel: "Free",
-        youtubeLink: "https://youtube.com/watch?v=example4",
-      },
-      {
-        title: "Evening Relaxation",
-        description: "Wind down with this calming evening meditation.",
-        category: "Meditation",
-        accessLevel: "Paid",
-        youtubeLink: "https://youtube.com/watch?v=example5",
-      },
-    ]);
-    console.log("✅ Added mock videos");
+    // await Video.insertMany([
+    //   {
+    //     title: "Morning Meditation for Beginners",
+    //     description:
+    //       "A peaceful 10-minute morning meditation session to start your day right.",
+    //     category: "Meditation",
+    //     accessLevel: "Free",
+    //     youtubeLink: "https://youtube.com/watch?v=example1",
+    //   },
+    //   {
+    //     title: "Advanced Strength Training",
+    //     description:
+    //       "High-intensity strength training workout for experienced athletes.",
+    //     category: "Fitness",
+    //     accessLevel: "Paid",
+    //     youtubeLink: "https://youtube.com/watch?v=example2",
+    //   },
+    //   {
+    //     title: "Nutrition Basics",
+    //     description:
+    //       "Learn the fundamentals of proper nutrition for health and fitness.",
+    //     category: "Education",
+    //     accessLevel: "Free",
+    //     youtubeLink: "https://youtube.com/watch?v=example3",
+    //   },
+    //   {
+    //     title: "Success Story: 50kg Weight Loss",
+    //     description: "Inspiring story of transformation and dedication.",
+    //     category: "Success Stories",
+    //     accessLevel: "Free",
+    //     youtubeLink: "https://youtube.com/watch?v=example4",
+    //   },
+    //   {
+    //     title: "Evening Relaxation",
+    //     description: "Wind down with this calming evening meditation.",
+    //     category: "Meditation",
+    //     accessLevel: "Paid",
+    //     youtubeLink: "https://youtube.com/watch?v=example5",
+    //   },
+    // ]);
+    // console.log("✅ Added mock videos");
 
     // Add mock diet plans
     await PDF.insertMany([
