@@ -136,6 +136,20 @@ const Dashboard = () => {
     // Additional chart data loading can go here
   };
 
+  const createTestPaymentData = async () => {
+    try {
+      console.log("Creating test payment data...");
+      // Add some test payments by calling the mock data endpoint
+      const response = await axios.post(`${API_BASE}/mock-data/add`);
+      console.log("Test data created:", response.data);
+      alert("Test payment data created successfully!");
+      loadDashboardData(); // Reload dashboard
+    } catch (error) {
+      console.error("Error creating test payment data:", error);
+      alert("Failed to create test data");
+    }
+  };
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -191,9 +205,14 @@ const Dashboard = () => {
     <div className="page-container">
       <div className="page-header">
         <h1 className="page-title-main">Dashboard Overview</h1>
-        <button className="btn btn-primary" onClick={loadDashboardData}>
-          Refresh Data
-        </button>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button className="btn btn-secondary" onClick={createTestPaymentData}>
+            Add Test Data
+          </button>
+          <button className="btn btn-primary" onClick={loadDashboardData}>
+            Refresh Data
+          </button>
+        </div>
       </div>
 
       {/* Stats Grid */}
