@@ -592,6 +592,84 @@ exports.addMockData = async (req, res) => {
         total: 8296,
         status: "shipped",
       },
+      {
+        userId: mockUsers[0]._id,
+        items: [
+          {
+            productId: "pre-workout-001",
+            name: "Pre-Workout Energy Boost",
+            price: 2799,
+            quantity: 1,
+          },
+          {
+            productId: "protein-bar-001",
+            name: "Protein Energy Bars (Pack of 12)",
+            price: 1299,
+            quantity: 2,
+          },
+        ],
+        contactInfo: {
+          name: "Raj Patel",
+          phone: "+919876543210",
+          address: "123 MG Road, Mumbai, Maharashtra 400001",
+        },
+        paymentMethod: "Net Banking",
+        total: 5397,
+        status: "delivered",
+        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+      },
+      {
+        userId: mockUsers[2]._id,
+        items: [
+          {
+            productId: "mass-gainer-001",
+            name: "Mass Gainer Chocolate",
+            price: 3299,
+            quantity: 1,
+          },
+        ],
+        contactInfo: {
+          name: "Arjun Singh",
+          phone: "+919876543212",
+          address: "789 Brigade Road, Bangalore, Karnataka 560025",
+        },
+        paymentMethod: "UPI",
+        total: 3299,
+        status: "pending",
+        createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+      },
+      {
+        userId: mockUsers[3]._id,
+        items: [
+          {
+            productId: "yoga-mat-001",
+            name: "Premium Yoga Mat",
+            price: 1599,
+            quantity: 1,
+          },
+          {
+            productId: "resistance-bands-001",
+            name: "Resistance Bands Set",
+            price: 899,
+            quantity: 1,
+          },
+          {
+            productId: "water-bottle-001",
+            name: "Steel Water Bottle 1L",
+            price: 699,
+            quantity: 2,
+          },
+        ],
+        contactInfo: {
+          name: "Neha Gupta",
+          phone: "+919876543213",
+          address: "321 CP Market, New Delhi, Delhi 110001",
+        },
+        paymentMethod: "Credit Card",
+        total: 3896,
+        status: "shipped",
+        createdAt: new Date(), // Today
+      },
     ]);
 
     res.status(200).json({
