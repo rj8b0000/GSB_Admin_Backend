@@ -31,7 +31,7 @@ const Notifications = () => {
       filtered = filtered.filter(
         (notification) =>
           notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          notification.message.toLowerCase().includes(searchTerm.toLowerCase()),
+          notification.message.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -94,10 +94,10 @@ const Notifications = () => {
     indexOfLastNotification - notificationsPerPage;
   const currentNotifications = filteredNotifications.slice(
     indexOfFirstNotification,
-    indexOfLastNotification,
+    indexOfLastNotification
   );
   const totalPages = Math.ceil(
-    filteredNotifications.length / notificationsPerPage,
+    filteredNotifications.length / notificationsPerPage
   );
 
   if (loading) {
@@ -297,7 +297,9 @@ const Notifications = () => {
             <button
               key={i + 1}
               onClick={() => setCurrentPage(i + 1)}
-              className={`btn ${currentPage === i + 1 ? "btn-primary" : "btn-secondary"}`}
+              className={`btn ${
+                currentPage === i + 1 ? "btn-primary" : "btn-secondary"
+              }`}
               style={{ minWidth: "40px" }}
             >
               {i + 1}
@@ -397,9 +399,9 @@ const Notifications = () => {
                   }}
                 >
                   <option value="All Users">All Users</option>
+                  <option value="Fremium Users">Fremium Users</option>
                   <option value="Premium Users">Premium Users</option>
                   <option value="Free Users">Free Users</option>
-                  <option value="New Users">New Users</option>
                 </select>
               </div>
 
@@ -517,7 +519,7 @@ const Notifications = () => {
                 notifications.filter(
                   (n) =>
                     new Date(n.sentAt).toDateString() ===
-                    new Date().toDateString(),
+                    new Date().toDateString()
                 ).length
               }
             </h3>

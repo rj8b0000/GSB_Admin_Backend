@@ -30,7 +30,7 @@ const Header = () => {
         <button className="sidebar-toggle">
           <Menu size={20} />
         </button>
-        <h1 className="page-title">{getPageTitle()}</h1>
+        {/* <h1 className="page-title">{getPageTitle()}</h1> */}
       </div>
       <div className="header-right">
         <button

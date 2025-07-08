@@ -21,15 +21,15 @@ const storyController = require("../controllers/StoryController");
 const uploadImage = require("../middlewares/imageUploadMiddleware");
 
 router.post(
-  "/",
+  "/:id",
   uploadImage, // Now supports both beforeImage and afterImage
-  storyController.addStory,
+  storyController.addStory
 );
 
 router.post(
   "/update",
   uploadImage, // For single image upload
-  storyController.dailyupdate,
+  storyController.dailyupdate
 );
 
 router.get("/", storyController.getAllStories);

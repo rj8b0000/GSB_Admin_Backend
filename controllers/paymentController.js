@@ -26,6 +26,16 @@ exports.createPayment = async (req, res) => {
     });
 
     await payment.save();
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { subscribed: true },
+      { new: true } // Return the updated user document
+    );
+
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
     res.status(201).json({ message: "Payment recorded successfully", payment });
   } catch (error) {
     res.status(400).json({ error: error.message });

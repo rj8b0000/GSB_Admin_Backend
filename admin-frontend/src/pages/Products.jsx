@@ -48,7 +48,7 @@ const Products = () => {
       filtered = filtered.filter(
         (product) =>
           product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          product.description?.toLowerCase().includes(searchTerm.toLowerCase()),
+          product.description?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -88,8 +88,8 @@ const Products = () => {
           formData.ingredients
             .split(",")
             .map((i) => i.trim())
-            .filter((i) => i),
-        ),
+            .filter((i) => i)
+        )
       );
       formDataToSend.append(
         "benefits",
@@ -97,8 +97,8 @@ const Products = () => {
           formData.benefits
             .split(",")
             .map((b) => b.trim())
-            .filter((b) => b),
-        ),
+            .filter((b) => b)
+        )
       );
 
       if (formData.image) {
@@ -109,7 +109,7 @@ const Products = () => {
         // Update product (you'll need to implement this endpoint)
         await axios.put(
           `${API_BASE}/products/${editingProduct._id}`,
-          formDataToSend,
+          formDataToSend
         );
       } else {
         await axios.post(`${API_BASE}/products`, formDataToSend);
@@ -186,7 +186,7 @@ const Products = () => {
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(
     indexOfFirstProduct,
-    indexOfLastProduct,
+    indexOfLastProduct
   );
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
@@ -280,7 +280,37 @@ const Products = () => {
           ))}
         </select>
       </div>
-
+      {/* Stats */}
+      <div className="stats-grid" style={{ marginTop: "30px" }}>
+        <div className="stat-card">
+          <div className="stat-content">
+            <h3>{products.length}</h3>
+            <p>Total Products</p>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-content">
+            <h3>{products.filter((p) => p.status === "In Stock").length}</h3>
+            <p>In Stock</p>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-content">
+            <h3>{products.filter((p) => p.status === "Low Stock").length}</h3>
+            <p>Low Stock</p>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-content">
+            <h3>
+              {formatCurrency(
+                products.reduce((total, p) => total + p.price, 0)
+              )}
+            </h3>
+            <p>Total Value</p>
+          </div>
+        </div>
+      </div>
       {/* Products Grid */}
       <div
         style={{
@@ -416,7 +446,9 @@ const Products = () => {
             <button
               key={i + 1}
               onClick={() => setCurrentPage(i + 1)}
-              className={`btn ${currentPage === i + 1 ? "btn-primary" : "btn-secondary"}`}
+              className={`btn ${
+                currentPage === i + 1 ? "btn-primary" : "btn-secondary"
+              }`}
               style={{ minWidth: "40px" }}
             >
               {i + 1}
@@ -663,38 +695,6 @@ const Products = () => {
           </div>
         </div>
       )}
-
-      {/* Stats */}
-      <div className="stats-grid" style={{ marginTop: "30px" }}>
-        <div className="stat-card">
-          <div className="stat-content">
-            <h3>{products.length}</h3>
-            <p>Total Products</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-content">
-            <h3>{products.filter((p) => p.status === "In Stock").length}</h3>
-            <p>In Stock</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-content">
-            <h3>{products.filter((p) => p.status === "Low Stock").length}</h3>
-            <p>Low Stock</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-content">
-            <h3>
-              {formatCurrency(
-                products.reduce((total, p) => total + p.price, 0),
-              )}
-            </h3>
-            <p>Total Value</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

@@ -13,9 +13,10 @@ const userSchema = new mongoose.Schema(
     otpExpiresAt: Date,
     score: { type: Number, default: 0 },
     flag: { type: String, enum: ["green", "yellow", "red"], default: "red" },
+    subscribed: { type: Boolean, default: false },
     lastScoreUpdate: { type: Date, default: Date.now },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("User", userSchema);

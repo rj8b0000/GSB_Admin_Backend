@@ -49,7 +49,7 @@ exports.updateUser = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       id,
       { $set: updateData },
-      { new: true, runValidators: true }, // Return updated document and validate schema
+      { new: true, runValidators: true } // Return updated document and validate schema
     );
 
     if (!user) {
@@ -144,6 +144,48 @@ exports.getAllUsersWithScores = async (req, res) => {
 
     const updatedUsers = await User.find().select("-otp -otpExpiresAt");
     res.status(200).json({ users: updatedUsers });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.allGreenFlags = async (req, res) => {
+  try {
+    const { flagAsk } = req.body;
+    const users = await User.find({ flag: flagAsk });
+    res.status(200).json({ count: users.length });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.changeFlag = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { flag } = req.body;
+    const users = await User.findByIdAndUpdate(
+      id,
+      { flag: flag },
+      { new: true, runValidators: true }
+    );
+    if (!users) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res
+      .status(200)
+      .json({ message: "User flag updated successfully", user: users });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

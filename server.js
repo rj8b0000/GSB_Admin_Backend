@@ -14,7 +14,7 @@ connectDB()
     } else {
       console.log("⚠️  Server starting WITHOUT database connection");
       console.log(
-        "🔧 Database-dependent features will not work until MongoDB is connected",
+        "🔧 Database-dependent features will not work until MongoDB is connected"
       );
     }
   })
@@ -27,7 +27,7 @@ app.use(
   cors({
     origin: ["http://localhost:3001", "http://127.0.0.1:3001"],
     credentials: true,
-  }),
+  })
 );
 app.use(express.json());
 app.use(express.static("public"));
@@ -48,6 +48,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const dailyUpdateRoutes = require("./routes/dailyUpdateRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const mockDataRoutes = require("./routes/mockDataRoutes");
+const departmentRoutes = require("./routes/departmentRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
@@ -64,6 +65,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/mock", mockDataRoutes);
+app.use("/api/dept", departmentRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {

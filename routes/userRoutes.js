@@ -11,5 +11,8 @@ router.get("/:id/score", userController.getUserWithScore);
 
 // Get all users with scores
 router.get("/all/scores", userController.getAllUsersWithScores);
+router.delete("/delete-user/:id", userController.deleteUser);
+router.post("/all/flag-count", userController.allGreenFlags);
+router.put("/update-flag/:id", userController.changeFlag);
 
 module.exports = router;

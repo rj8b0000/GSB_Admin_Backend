@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: String, ref: "User", required: true },
     amount: { type: Number, required: true },
     currency: { type: String, default: "INR" },
     paymentMethod: { type: String, required: true },
@@ -21,7 +21,7 @@ const paymentSchema = new mongoose.Schema(
     description: { type: String },
     paymentDate: { type: Date, default: Date.now },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Payment", paymentSchema);
