@@ -54,6 +54,17 @@ exports.getAllDailyUpdates = async (req, res) => {
     const dailyUpdates = await DailyUpdate.find()
       .populate("user", "fullName email")
       .sort({ createdAt: -1 });
+
+    // Debug logging to check image URLs
+    console.log("Fetched daily updates with image URLs:");
+    dailyUpdates.forEach((update, index) => {
+      console.log(`Update ${index + 1}:`, {
+        title: update.title,
+        imageUrl: update.imageUrl,
+        user: update.user?.fullName || "No user",
+      });
+    });
+
     res.status(200).json({
       message: "Daily updates fetched successfully",
       count: dailyUpdates.length,

@@ -82,6 +82,17 @@ exports.getAllStories = async (req, res) => {
     const stories = await Story.find()
       .populate("user", "fullName email")
       .sort({ createdAt: -1 });
+
+    // Debug logging to check image URLs
+    console.log("Fetched stories with image URLs:");
+    stories.forEach((story, index) => {
+      console.log(`Story ${index + 1}:`, {
+        title: story.title,
+        beforeImageUrl: story.beforeImageUrl,
+        afterImageUrl: story.afterImageUrl,
+      });
+    });
+
     res.status(200).json({
       message: "Stories fetched successfully",
       stories,
