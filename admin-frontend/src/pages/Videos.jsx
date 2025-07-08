@@ -29,6 +29,8 @@ const Videos = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [showVideoPlayer, setShowVideoPlayer] = useState(false);
+  const [currentVideoUrl, setCurrentVideoUrl] = useState("");
   const accessLevels = ["Free", "Paid"];
   const [categoryForm, setCategoryForm] = useState({
     name: "",
@@ -566,7 +568,10 @@ const Videos = () => {
               )}
               {video.videoUrl && (
                 <button
-                  onClick={() => window.open(video.videoUrl, "_blank")}
+                  onClick={() => {
+                    setCurrentVideoUrl(video.videoUrl);
+                    setShowVideoPlayer(true);
+                  }}
                   className="action-btn btn-view"
                   style={{
                     display: "inline-flex",
