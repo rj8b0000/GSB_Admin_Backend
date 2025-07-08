@@ -336,19 +336,19 @@ async function addMockData() {
         user: mockUsers[0]._id,
         title: "Morning Workout Complete",
         description: "Completed 45 minutes of cardio and strength training.",
-        imageUrl: "https://example.com/workout1.jpg",
+        imageUrl: null,
       },
       {
         user: mockUsers[1]._id,
         title: "Healthy Breakfast",
         description: "Started the day with oats, fruits, and protein shake.",
-        imageUrl: "https://example.com/breakfast1.jpg",
+        imageUrl: null,
       },
       {
         user: mockUsers[3]._id,
         title: "Evening Yoga Session",
         description: "Relaxing yoga session to end the day peacefully.",
-        imageUrl: "https://example.com/yoga1.jpg",
+        imageUrl: null,
       },
     ]);
     console.log("✅ Added mock daily updates");
