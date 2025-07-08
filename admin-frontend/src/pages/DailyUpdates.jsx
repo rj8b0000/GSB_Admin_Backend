@@ -16,7 +16,17 @@ const DailyUpdates = () => {
     try {
       setLoading(true);
       const response = await axios.get(`${API_BASE}/daily-updates`);
-      setDailyUpdates(response.data.dailyUpdates || []);
+      const updates = response.data.dailyUpdates || [];
+
+      // Debug: Log image URLs to console
+      console.log("Loaded daily updates with images:");
+      updates.forEach((update, index) => {
+        console.log(`Update ${index + 1} - ${update.title}:`, {
+          imageUrl: update.imageUrl,
+        });
+      });
+
+      setDailyUpdates(updates);
     } catch (error) {
       console.error("Error loading daily updates:", error);
     } finally {

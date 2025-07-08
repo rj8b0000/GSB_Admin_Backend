@@ -16,7 +16,18 @@ const UserStories = () => {
     try {
       setLoading(true);
       const response = await axios.get(`${API_BASE}/stories`);
-      setStories(response.data.stories || []);
+      const stories = response.data.stories || [];
+
+      // Debug: Log image URLs to console
+      console.log("Loaded stories with images:");
+      stories.forEach((story, index) => {
+        console.log(`Story ${index + 1} - ${story.title}:`, {
+          beforeImageUrl: story.beforeImageUrl,
+          afterImageUrl: story.afterImageUrl,
+        });
+      });
+
+      setStories(stories);
     } catch (error) {
       console.error("Error loading stories:", error);
     } finally {
