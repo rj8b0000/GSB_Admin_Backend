@@ -105,6 +105,9 @@ exports.getPaymentAnalytics = async (req, res) => {
       status: "completed",
     });
 
+    console.log("Subscription payments count:", subscriptionPayments);
+    console.log("Product payments count:", productPayments);
+
     // Revenue by payment type
     const revenueByPaymentType = await Payment.aggregate([
       { $match: { status: "completed" } },
