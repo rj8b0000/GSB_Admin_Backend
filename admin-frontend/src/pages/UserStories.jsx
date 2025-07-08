@@ -35,6 +35,23 @@ const UserStories = () => {
     }
   };
 
+  const cleanupDemoData = async () => {
+    if (
+      window.confirm(
+        "Are you sure you want to remove all demo stories with broken images? This action cannot be undone.",
+      )
+    ) {
+      try {
+        const response = await axios.delete(`${API_BASE}/stories/cleanup-demo`);
+        alert(response.data.message);
+        loadStories(); // Reload the stories after cleanup
+      } catch (error) {
+        console.error("Error cleaning up demo data:", error);
+        alert("Failed to cleanup demo data. Please try again.");
+      }
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
@@ -57,6 +74,9 @@ const UserStories = () => {
       <div className="page-header">
         <h1 className="page-title-main">User Stories Management</h1>
         <div className="filter-controls">
+          <button className="btn btn-secondary" onClick={cleanupDemoData}>
+            🧹 Clean Demo Data
+          </button>
           <button className="btn btn-primary" onClick={loadStories}>
             <RefreshCw size={16} />
             Refresh
