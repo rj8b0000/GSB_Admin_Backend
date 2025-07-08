@@ -389,40 +389,32 @@ exports.addMockData = async (req, res) => {
         title: "My 20kg Weight Loss Journey",
         description:
           "After 6 months of following GSB programs, I lost 20kg and gained confidence. The diet plans and workout videos were game changers for me.",
-        beforeImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before1.jpg",
-        afterImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after1.jpg",
+        beforeImageUrl: null,
+        afterImageUrl: null,
       },
       {
         user: mockUsers[1]._id,
         title: "From Skinny to Strong",
         description:
           "I gained 15kg of lean muscle mass in 8 months. The nutrition guidance and workout plans helped me achieve my dream physique.",
-        beforeImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before2.jpg",
-        afterImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after2.jpg",
+        beforeImageUrl: null,
+        afterImageUrl: null,
       },
       {
         user: mockUsers[3]._id,
         title: "Transformation After Pregnancy",
         description:
           "Lost 25kg post-pregnancy with GSB's safe and effective programs. Now I'm stronger than ever before!",
-        beforeImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before3.jpg",
-        afterImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after3.jpg",
+        beforeImageUrl: null,
+        afterImageUrl: null,
       },
       {
         user: mockUsers[4]._id,
         title: "Overcoming Lifestyle Diseases",
         description:
           "Reversed my diabetes and high blood pressure through proper diet and exercise. GSB saved my life!",
-        beforeImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before4.jpg",
-        afterImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after4.jpg",
+        beforeImageUrl: null,
+        afterImageUrl: null,
       },
     ]);
 
