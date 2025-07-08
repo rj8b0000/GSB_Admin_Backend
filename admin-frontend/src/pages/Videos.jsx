@@ -506,7 +506,7 @@ const Videos = () => {
                 style={{ marginRight: "8px", cursor: "pointer" }}
                 onClick={() => handleSort("category")}
               >
-                {/* {video.category.name}{" "} */}
+                {video.category?.name || "No Category"}{" "}
                 {sortConfig.key === "category" &&
                   (sortConfig.direction === "asc" ? "↑" : "↓")}
               </span>
