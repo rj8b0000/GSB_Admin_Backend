@@ -452,6 +452,33 @@ const DietPlans = () => {
                 />
               </div>
 
+              {isUploading && (
+                <div style={{ marginBottom: "20px" }}>
+                  <div
+                    style={{ marginBottom: "8px", color: "var(--text-gray)" }}
+                  >
+                    Upload Progress: {uploadProgress}%
+                  </div>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "8px",
+                      backgroundColor: "var(--bg-secondary)",
+                      borderRadius: "4px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${uploadProgress}%`,
+                        height: "100%",
+                        backgroundColor: "var(--primary-color)",
+                        transition: "width 0.3s ease",
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
               <div
                 style={{
                   display: "flex",
@@ -464,11 +491,21 @@ const DietPlans = () => {
                   type="button"
                   onClick={() => setShowModal(false)}
                   className="btn btn-secondary"
+                  disabled={isUploading}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
-                  {editingPlan ? "Update" : "Create"} Diet Plan
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isUploading}
+                >
+                  {isUploading
+                    ? "Uploading..."
+                    : editingPlan
+                      ? "Update"
+                      : "Create"}{" "}
+                  Diet Plan
                 </button>
               </div>
             </form>
