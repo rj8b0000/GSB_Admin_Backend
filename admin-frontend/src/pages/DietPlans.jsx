@@ -21,6 +21,8 @@ const DietPlans = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [plansPerPage] = useState(8);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -76,14 +78,30 @@ const DietPlans = () => {
         formDataToSend.append("thumbnail", formData.thumbnail);
       }
 
+      setIsUploading(true);
+      setUploadProgress(0);
+
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total,
+          );
+          setUploadProgress(progress);
+        },
+      };
+
       if (editingPlan) {
         // Update plan (you'll need to implement this endpoint)
         await axios.put(
           `${API_BASE}/dietplans/${editingPlan._id}`,
           formDataToSend,
+          config,
         );
       } else {
-        await axios.post(`${API_BASE}/dietplans`, formDataToSend);
+        await axios.post(`${API_BASE}/dietplans`, formDataToSend, config);
       }
 
       setShowModal(false);
@@ -98,6 +116,9 @@ const DietPlans = () => {
     } catch (error) {
       console.error("Error saving diet plan:", error);
       alert("Error saving diet plan. Please try again.");
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -431,6 +452,33 @@ const DietPlans = () => {
                 />
               </div>
 
+              {isUploading && (
+                <div style={{ marginBottom: "20px" }}>
+                  <div
+                    style={{ marginBottom: "8px", color: "var(--text-gray)" }}
+                  >
+                    Upload Progress: {uploadProgress}%
+                  </div>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "8px",
+                      backgroundColor: "var(--bg-secondary)",
+                      borderRadius: "4px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${uploadProgress}%`,
+                        height: "100%",
+                        backgroundColor: "var(--primary-color)",
+                        transition: "width 0.3s ease",
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
               <div
                 style={{
                   display: "flex",
@@ -443,11 +491,21 @@ const DietPlans = () => {
                   type="button"
                   onClick={() => setShowModal(false)}
                   className="btn btn-secondary"
+                  disabled={isUploading}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
-                  {editingPlan ? "Update" : "Create"} Diet Plan
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isUploading}
+                >
+                  {isUploading
+                    ? "Uploading..."
+                    : editingPlan
+                      ? "Update"
+                      : "Create"}{" "}
+                  Diet Plan
                 </button>
               </div>
             </form>

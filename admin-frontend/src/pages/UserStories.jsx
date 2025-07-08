@@ -16,11 +16,39 @@ const UserStories = () => {
     try {
       setLoading(true);
       const response = await axios.get(`${API_BASE}/stories`);
-      setStories(response.data.stories || []);
+      const stories = response.data.stories || [];
+
+      // Debug: Log image URLs to console
+      console.log("Loaded stories with images:");
+      stories.forEach((story, index) => {
+        console.log(`Story ${index + 1} - ${story.title}:`, {
+          beforeImageUrl: story.beforeImageUrl,
+          afterImageUrl: story.afterImageUrl,
+        });
+      });
+
+      setStories(stories);
     } catch (error) {
       console.error("Error loading stories:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const cleanupDemoData = async () => {
+    if (
+      window.confirm(
+        "Are you sure you want to remove all demo stories with broken images? This action cannot be undone.",
+      )
+    ) {
+      try {
+        const response = await axios.delete(`${API_BASE}/stories/cleanup-demo`);
+        alert(response.data.message);
+        loadStories(); // Reload the stories after cleanup
+      } catch (error) {
+        console.error("Error cleaning up demo data:", error);
+        alert("Failed to cleanup demo data. Please try again.");
+      }
     }
   };
 
@@ -46,6 +74,9 @@ const UserStories = () => {
       <div className="page-header">
         <h1 className="page-title-main">User Stories Management</h1>
         <div className="filter-controls">
+          <button className="btn btn-secondary" onClick={cleanupDemoData}>
+            🧹 Clean Demo Data
+          </button>
           <button className="btn btn-primary" onClick={loadStories}>
             <RefreshCw size={16} />
             Refresh
@@ -132,10 +163,24 @@ const UserStories = () => {
                       src={story.beforeImageUrl}
                       alt="Before"
                       className="story-image"
+                      onError={(e) => {
+                        console.error(
+                          "Failed to load before image:",
+                          story.beforeImageUrl,
+                        );
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "block";
+                      }}
                     />
-                  ) : (
-                    <div className="no-image">No before image</div>
-                  )}
+                  ) : null}
+                  <div
+                    className="no-image"
+                    style={{ display: story.beforeImageUrl ? "none" : "block" }}
+                  >
+                    {story.beforeImageUrl
+                      ? "Image failed to load"
+                      : "No before image"}
+                  </div>
                 </div>
 
                 <div className="image-section">
@@ -145,10 +190,24 @@ const UserStories = () => {
                       src={story.afterImageUrl}
                       alt="After"
                       className="story-image"
+                      onError={(e) => {
+                        console.error(
+                          "Failed to load after image:",
+                          story.afterImageUrl,
+                        );
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "block";
+                      }}
                     />
-                  ) : (
-                    <div className="no-image">No after image</div>
-                  )}
+                  ) : null}
+                  <div
+                    className="no-image"
+                    style={{ display: story.afterImageUrl ? "none" : "block" }}
+                  >
+                    {story.afterImageUrl
+                      ? "Image failed to load"
+                      : "No after image"}
+                  </div>
                 </div>
               </div>
             </div>

@@ -27,6 +27,10 @@ const Videos = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [videosPerPage] = useState(10);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [showVideoPlayer, setShowVideoPlayer] = useState(false);
+  const [currentVideoUrl, setCurrentVideoUrl] = useState("");
   const accessLevels = ["Free", "Paid"];
   const [categoryForm, setCategoryForm] = useState({
     name: "",
@@ -55,13 +59,13 @@ const Videos = () => {
       filtered = filtered.filter(
         (video) =>
           video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          video.description?.toLowerCase().includes(searchTerm.toLowerCase())
+          video.description?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     if (categoryFilter) {
       filtered = filtered.filter(
-        (video) => video.category.categoryId === categoryFilter
+        (video) => video.category?.categoryId === categoryFilter,
       );
     }
 
@@ -74,8 +78,8 @@ const Videos = () => {
       filtered = [...filtered].sort((a, b) => {
         let aValue, bValue;
         if (sortConfig.key === "category") {
-          aValue = a.category.name || "";
-          bValue = b.category.name || "";
+          aValue = a.category?.name || "";
+          bValue = b.category?.name || "";
         } else if (sortConfig.key === "createdAt") {
           aValue = new Date(a.createdAt).getTime();
           bValue = new Date(b.createdAt).getTime();
@@ -110,7 +114,7 @@ const Videos = () => {
       console.error("Error loading videos:", error);
       alert(
         error.response?.data?.message ||
-          "Failed to load videos. Please try again."
+          "Failed to load videos. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -127,7 +131,7 @@ const Videos = () => {
       console.error("Error loading categories:", error);
       alert(
         error.response?.data?.message ||
-          "Failed to load categories. Please try again."
+          "Failed to load categories. Please try again.",
       );
     }
   };
@@ -159,24 +163,30 @@ const Videos = () => {
         console.log(`${pair[0]}: ${pair[1]}`);
       }
 
+      setIsUploading(true);
+      setUploadProgress(0);
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total,
+          );
+          setUploadProgress(progress);
+        },
+      };
+
       if (editingVideo) {
         await axios.put(
           `${API_BASE}/videos/${editingVideo._id}`,
           formDataToSend,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
+          config,
         );
       } else {
-        await axios.post(`${API_BASE}/videos`, formDataToSend, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        await axios.post(`${API_BASE}/videos`, formDataToSend, config);
       }
 
       setShowModal(false);
@@ -194,8 +204,12 @@ const Videos = () => {
     } catch (error) {
       console.error("Error saving video:", error);
       alert(
-        error.response?.data?.message || "Error saving video. Please try again."
+        error.response?.data?.message ||
+          "Error saving video. Please try again.",
       );
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -224,7 +238,7 @@ const Videos = () => {
         console.error("Error deleting video:", error);
         alert(
           error.response?.data?.message ||
-            "Error deleting video. Please try again."
+            "Error deleting video. Please try again.",
         );
       }
     }
@@ -242,7 +256,7 @@ const Videos = () => {
         await axios.put(
           `${API_BASE}/video-categories/update/${editingCategory.categoryId}`,
           payload,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
       } else {
         await axios.post(`${API_BASE}/video-categories/add`, payload, {
@@ -258,7 +272,7 @@ const Videos = () => {
       console.error("Error saving category:", error);
       alert(
         error.response?.data?.message ||
-          "Error saving category. Please try again."
+          "Error saving category. Please try again.",
       );
     }
   };
@@ -270,14 +284,14 @@ const Videos = () => {
           `${API_BASE}/video-categories/delete/${categoryId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
         loadCategories();
       } catch (error) {
         console.error("Error deleting category:", error);
         alert(
           error.response?.data?.message ||
-            "Error deleting category. Please try again."
+            "Error deleting category. Please try again.",
         );
       }
     }
@@ -300,7 +314,7 @@ const Videos = () => {
   const indexOfFirstVideo = indexOfLastVideo - videosPerPage;
   const currentVideos = filteredVideos.slice(
     indexOfFirstVideo,
-    indexOfLastVideo
+    indexOfLastVideo,
   );
   const totalPages = Math.ceil(filteredVideos.length / videosPerPage);
 
@@ -505,7 +519,7 @@ const Videos = () => {
                 style={{ marginRight: "8px", cursor: "pointer" }}
                 onClick={() => handleSort("category")}
               >
-                {/* {video.category.name}{" "} */}
+                {video.category?.name || "No Category"}{" "}
                 {sortConfig.key === "category" &&
                   (sortConfig.direction === "asc" ? "↑" : "↓")}
               </span>
@@ -547,9 +561,26 @@ const Videos = () => {
                     display: "inline-flex",
                     alignItems: "center",
                   }}
+                  title="Play on YouTube"
                 >
                   <Play size={14} />
                 </a>
+              )}
+              {video.videoUrl && (
+                <button
+                  onClick={() => {
+                    setCurrentVideoUrl(video.videoUrl);
+                    setShowVideoPlayer(true);
+                  }}
+                  className="action-btn btn-view"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                  }}
+                  title="Play uploaded video"
+                >
+                  <Play size={14} />
+                </button>
               )}
             </div>
           </div>
@@ -781,6 +812,33 @@ const Videos = () => {
                 </small>
               </div>
 
+              {isUploading && (
+                <div style={{ marginBottom: "20px" }}>
+                  <div
+                    style={{ marginBottom: "8px", color: "var(--text-gray)" }}
+                  >
+                    Upload Progress: {uploadProgress}%
+                  </div>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "8px",
+                      backgroundColor: "var(--bg-secondary)",
+                      borderRadius: "4px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${uploadProgress}%`,
+                        height: "100%",
+                        backgroundColor: "var(--primary-color)",
+                        transition: "width 0.3s ease",
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
               <div
                 style={{
                   display: "flex",
@@ -793,11 +851,21 @@ const Videos = () => {
                   type="button"
                   onClick={() => setShowModal(false)}
                   className="btn btn-secondary"
+                  disabled={isUploading}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
-                  {editingVideo ? "Update" : "Create"} Video
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isUploading}
+                >
+                  {isUploading
+                    ? "Uploading..."
+                    : editingVideo
+                      ? "Update"
+                      : "Create"}{" "}
+                  Video
                 </button>
               </div>
             </form>
@@ -1003,6 +1071,76 @@ const Videos = () => {
           </div>
         </div>
       </div>
+
+      {/* Video Player Modal */}
+      {showVideoPlayer && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.9)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+          onClick={() => setShowVideoPlayer(false)}
+        >
+          <div
+            style={{
+              width: "90%",
+              maxWidth: "800px",
+              maxHeight: "90%",
+              backgroundColor: "#000",
+              borderRadius: "8px",
+              overflow: "hidden",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              style={{
+                padding: "10px",
+                backgroundColor: "var(--card-bg)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h3 style={{ color: "var(--text-white)", margin: 0 }}>
+                Video Player
+              </h3>
+              <button
+                onClick={() => setShowVideoPlayer(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--text-white)",
+                  fontSize: "20px",
+                  cursor: "pointer",
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <video
+              src={currentVideoUrl}
+              controls
+              autoPlay
+              style={{
+                width: "100%",
+                height: "auto",
+                maxHeight: "70vh",
+                display: "block",
+              }}
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

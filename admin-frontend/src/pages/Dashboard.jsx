@@ -19,7 +19,7 @@ ChartJS.register(
   Legend,
   CategoryScale,
   LinearScale,
-  BarElement
+  BarElement,
 );
 
 const Dashboard = () => {
@@ -55,7 +55,7 @@ const Dashboard = () => {
       const users = response.data.users || [];
 
       const greenFlagUsers = users.filter(
-        (user) => user.flag === "green"
+        (user) => user.flag === "green",
       ).length;
 
       setStats((prev) => ({
@@ -87,8 +87,11 @@ const Dashboard = () => {
 
   const loadPaymentStats = async () => {
     try {
+      console.log("Loading payment analytics...");
       const response = await axios.get(`${API_BASE}/payments/analytics`);
       const analytics = response.data.analytics || {};
+
+      console.log("Payment analytics response:", analytics);
 
       setStats((prev) => ({
         ...prev,
@@ -96,25 +99,57 @@ const Dashboard = () => {
         totalPayments: analytics.totalPayments || 0,
       }));
 
-      // Prepare payment source chart data
-      const sources = analytics.paymentSources || {};
+      // Prepare payment type chart data
+      const paymentTypes = analytics.paymentTypes || {};
+      console.log("Payment types data:", paymentTypes);
+
+      const chartData = {
+        labels: ["Subscriptions", "Products"],
+        datasets: [
+          {
+            data: [paymentTypes.subscription || 0, paymentTypes.product || 0],
+            backgroundColor: ["#D4AF37", "#FFD700"],
+            borderWidth: 0,
+          },
+        ],
+      };
+
+      console.log("Setting payment chart data:", chartData);
+      setPaymentData(chartData);
+    } catch (error) {
+      console.error("Error loading payment stats:", error);
+      // Set empty data so chart still shows
       setPaymentData({
         labels: ["Subscriptions", "Products"],
         datasets: [
           {
-            data: [sources.app || 0, sources.web],
+            data: [0, 0],
             backgroundColor: ["#D4AF37", "#FFD700"],
             borderWidth: 0,
           },
         ],
       });
-    } catch (error) {
-      console.error("Error loading payment stats:", error);
     }
   };
 
   const loadChartData = async () => {
     // Additional chart data loading can go here
+  };
+
+  const createTestPaymentData = async () => {
+    try {
+      console.log("Creating test payment data...");
+      // Add some test payments by calling the mock data endpoint
+      const response = await axios.post(`${API_BASE}/mock/add-mock-data`);
+      console.log("Test data created:", response.data);
+      alert("Test payment data created successfully!");
+      loadDashboardData(); // Reload dashboard
+    } catch (error) {
+      console.error("Error creating test payment data:", error);
+      alert(
+        `Failed to create test data: ${error.response?.data?.message || error.message}`,
+      );
+    }
   };
 
   const formatCurrency = (amount) => {
@@ -155,11 +190,24 @@ const Dashboard = () => {
 
   const doughnutOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
+        position: "bottom",
         labels: {
           color: "#ffffff",
+          padding: 20,
+          font: {
+            size: 12,
+          },
         },
+      },
+      tooltip: {
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        titleColor: "#ffffff",
+        bodyColor: "#ffffff",
+        borderColor: "#D4AF37",
+        borderWidth: 1,
       },
     },
   };
@@ -172,9 +220,14 @@ const Dashboard = () => {
     <div className="page-container">
       <div className="page-header">
         <h1 className="page-title-main">Dashboard Overview</h1>
-        <button className="btn btn-primary" onClick={loadDashboardData}>
-          Refresh Data
-        </button>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button className="btn btn-secondary" onClick={createTestPaymentData}>
+            Add Test Data
+          </button>
+          <button className="btn btn-primary" onClick={loadDashboardData}>
+            Refresh Data
+          </button>
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -224,11 +277,22 @@ const Dashboard = () => {
       <div className="charts-grid">
         <div className="chart-card">
           <h3>Payment Sources</h3>
-          {paymentData ? (
-            <Doughnut data={paymentData} options={doughnutOptions} />
-          ) : (
-            <div>No payment data available</div>
-          )}
+          <div
+            style={{
+              height: "300px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {paymentData ? (
+              <Doughnut data={paymentData} options={doughnutOptions} />
+            ) : (
+              <div style={{ color: "#999", textAlign: "center" }}>
+                <p>Loading payment data...</p>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="chart-card">

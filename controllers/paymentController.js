@@ -29,7 +29,7 @@ exports.createPayment = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       userId,
       { subscribed: true },
-      { new: true } // Return the updated user document
+      { new: true }, // Return the updated user document
     );
 
     // Check if user exists
@@ -58,11 +58,16 @@ exports.getAllPayments = async (req, res) => {
 // Get payment analytics
 exports.getPaymentAnalytics = async (req, res) => {
   try {
+    console.log("Payment analytics endpoint called");
+
     const totalPayments = await Payment.countDocuments({ status: "completed" });
+    console.log("Total completed payments:", totalPayments);
+
     const totalRevenue = await Payment.aggregate([
       { $match: { status: "completed" } },
       { $group: { _id: null, total: { $sum: "$amount" } } },
     ]);
+    console.log("Total revenue aggregation:", totalRevenue);
 
     const appPayments = await Payment.countDocuments({
       source: "app",
@@ -89,6 +94,31 @@ exports.getPaymentAnalytics = async (req, res) => {
       subscriptionType: "lifetime",
       status: "completed",
     });
+
+    // Payment type analytics (subscription vs product)
+    const subscriptionPayments = await Payment.countDocuments({
+      paymentType: "subscription",
+      status: "completed",
+    });
+    const productPayments = await Payment.countDocuments({
+      paymentType: "product",
+      status: "completed",
+    });
+
+    console.log("Subscription payments count:", subscriptionPayments);
+    console.log("Product payments count:", productPayments);
+
+    // Revenue by payment type
+    const revenueByPaymentType = await Payment.aggregate([
+      { $match: { status: "completed" } },
+      {
+        $group: {
+          _id: "$paymentType",
+          total: { $sum: "$amount" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
 
     // Revenue by source
     const revenueBySource = await Payment.aggregate([
@@ -128,12 +158,17 @@ exports.getPaymentAnalytics = async (req, res) => {
           web: webPayments,
           manual: manualPayments,
         },
+        paymentTypes: {
+          subscription: subscriptionPayments,
+          product: productPayments,
+        },
         subscriptionTypes: {
           monthly: monthlySubscriptions,
           yearly: yearlySubscriptions,
           lifetime: lifetimeSubscriptions,
         },
         revenueBySource,
+        revenueByPaymentType,
         monthlyRevenue,
       },
     });

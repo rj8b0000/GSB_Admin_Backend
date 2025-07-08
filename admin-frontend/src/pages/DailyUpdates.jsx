@@ -16,7 +16,17 @@ const DailyUpdates = () => {
     try {
       setLoading(true);
       const response = await axios.get(`${API_BASE}/daily-updates`);
-      setDailyUpdates(response.data.dailyUpdates || []);
+      const updates = response.data.dailyUpdates || [];
+
+      // Debug: Log image URLs to console
+      console.log("Loaded daily updates with images:");
+      updates.forEach((update, index) => {
+        console.log(`Update ${index + 1} - ${update.title}:`, {
+          imageUrl: update.imageUrl,
+        });
+      });
+
+      setDailyUpdates(updates);
     } catch (error) {
       console.error("Error loading daily updates:", error);
     } finally {
@@ -48,6 +58,25 @@ const DailyUpdates = () => {
     ).length;
   };
 
+  const cleanupDemoData = async () => {
+    if (
+      window.confirm(
+        "Are you sure you want to remove all demo daily updates with broken images? This action cannot be undone.",
+      )
+    ) {
+      try {
+        const response = await axios.delete(
+          `${API_BASE}/daily-updates/cleanup-demo/all`,
+        );
+        alert(response.data.message);
+        loadDailyUpdates(); // Reload the updates after cleanup
+      } catch (error) {
+        console.error("Error cleaning up demo daily updates:", error);
+        alert("Failed to cleanup demo data. Please try again.");
+      }
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading daily updates...</div>;
   }
@@ -57,6 +86,9 @@ const DailyUpdates = () => {
       <div className="page-header">
         <h1 className="page-title-main">Daily Updates Management</h1>
         <div className="filter-controls">
+          <button className="btn btn-secondary" onClick={cleanupDemoData}>
+            🧹 Clean Demo Data
+          </button>
           <button className="btn btn-primary" onClick={loadDailyUpdates}>
             <RefreshCw size={16} />
             Refresh
@@ -140,16 +172,48 @@ const DailyUpdates = () => {
                   </td>
                   <td>
                     {update.imageUrl ? (
-                      <img
-                        src={update.imageUrl}
-                        alt="Daily update"
+                      <div
                         style={{
+                          position: "relative",
                           width: "50px",
                           height: "50px",
-                          objectFit: "cover",
-                          borderRadius: "4px",
                         }}
-                      />
+                      >
+                        <img
+                          src={update.imageUrl}
+                          alt="Daily update"
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            objectFit: "cover",
+                            borderRadius: "4px",
+                          }}
+                          onError={(e) => {
+                            console.error(
+                              "Failed to load daily update image:",
+                              update.imageUrl,
+                            );
+                            e.target.style.display = "none";
+                            e.target.nextSibling.style.display = "flex";
+                          }}
+                        />
+                        <div
+                          style={{
+                            display: "none",
+                            width: "50px",
+                            height: "50px",
+                            backgroundColor: "#333",
+                            color: "#999",
+                            fontSize: "10px",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "4px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Failed to load
+                        </div>
+                      </div>
                     ) : (
                       <span style={{ color: "#999" }}>No image</span>
                     )}

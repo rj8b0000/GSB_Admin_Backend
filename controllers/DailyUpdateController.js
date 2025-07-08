@@ -1,8 +1,5 @@
 const DailyUpdate = require("../models/DailyUpdate");
-const {
-  uploadFileToS3,
-  deleteFileFromS3,
-} = require("../services/mockS3Uploader");
+const { uploadFileToS3, deleteFileFromS3 } = require("../services/s3Uploader");
 
 exports.addDailyUpdate = async (req, res) => {
   try {
@@ -34,7 +31,7 @@ exports.addDailyUpdate = async (req, res) => {
     // Populate user details in the response
     const populatedUpdate = await DailyUpdate.populate(
       "user",
-      "fullName email"
+      "fullName email",
     );
 
     res.status(201).json({
@@ -57,6 +54,17 @@ exports.getAllDailyUpdates = async (req, res) => {
     const dailyUpdates = await DailyUpdate.find()
       .populate("user", "fullName email")
       .sort({ createdAt: -1 });
+
+    // Debug logging to check image URLs
+    console.log("Fetched daily updates with image URLs:");
+    dailyUpdates.forEach((update, index) => {
+      console.log(`Update ${index + 1}:`, {
+        title: update.title,
+        imageUrl: update.imageUrl,
+        user: update.user?.fullName || "No user",
+      });
+    });
+
     res.status(200).json({
       message: "Daily updates fetched successfully",
       count: dailyUpdates.length,
@@ -96,7 +104,7 @@ exports.updateDailyUpdate = async (req, res) => {
     const dailyUpdate = await DailyUpdate.findByIdAndUpdate(
       id,
       { $set: updateData },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).populate("user", "fullName email");
 
     if (!BlaiseUpdate) {
@@ -137,5 +145,28 @@ exports.deleteDailyUpdate = async (req, res) => {
       message: "Failed to delete daily update",
       error: error.message,
     });
+  }
+};
+
+exports.cleanupDemoDailyUpdates = async (req, res) => {
+  try {
+    // Remove all daily updates with demo bucket URLs
+    const result = await DailyUpdate.deleteMany({
+      imageUrl: { $regex: "demo-gsb-bucket" },
+    });
+
+    console.log(`Cleaned up ${result.deletedCount} demo daily updates`);
+
+    res.status(200).json({
+      message: `Successfully cleaned up ${result.deletedCount} demo daily updates`,
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message: "Failed to cleanup demo daily updates",
+        error: error.message,
+      });
   }
 };

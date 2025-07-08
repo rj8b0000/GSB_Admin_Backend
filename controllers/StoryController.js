@@ -1,5 +1,5 @@
 const Story = require("../models/Story");
-const { uploadFileToS3 } = require("../services/mockS3Uploader");
+const { uploadFileToS3 } = require("../services/s3Uploader");
 
 exports.addStory = async (req, res) => {
   try {
@@ -82,6 +82,17 @@ exports.getAllStories = async (req, res) => {
     const stories = await Story.find()
       .populate("user", "fullName email")
       .sort({ createdAt: -1 });
+
+    // Debug logging to check image URLs
+    console.log("Fetched stories with image URLs:");
+    stories.forEach((story, index) => {
+      console.log(`Story ${index + 1}:`, {
+        title: story.title,
+        beforeImageUrl: story.beforeImageUrl,
+        afterImageUrl: story.afterImageUrl,
+      });
+    });
+
     res.status(200).json({
       message: "Stories fetched successfully",
       stories,
@@ -90,5 +101,31 @@ exports.getAllStories = async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to fetch stories", error: error.message });
+  }
+};
+
+exports.cleanupDemoStories = async (req, res) => {
+  try {
+    // Remove all stories with demo bucket URLs
+    const result = await Story.deleteMany({
+      $or: [
+        { beforeImageUrl: { $regex: "demo-gsb-bucket" } },
+        { afterImageUrl: { $regex: "demo-gsb-bucket" } },
+      ],
+    });
+
+    console.log(`Cleaned up ${result.deletedCount} demo stories`);
+
+    res.status(200).json({
+      message: `Successfully cleaned up ${result.deletedCount} demo stories`,
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message: "Failed to cleanup demo stories",
+        error: error.message,
+      });
   }
 };

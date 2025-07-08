@@ -48,6 +48,32 @@ const Orders = () => {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
   };
 
+  // Calculate statistics
+  const totalOrders = orders.length;
+  const totalRevenue = orders.reduce(
+    (sum, order) => sum + (order.total || 0),
+    0,
+  );
+  const pendingOrders = orders.filter(
+    (order) => order.status === "pending",
+  ).length;
+  const completedOrders = orders.filter(
+    (order) => order.status === "delivered",
+  ).length;
+  const avgOrderValue = orders.length ? totalRevenue / orders.length : 0;
+
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      await axios.put(`${API_BASE}/orders/${orderId}/status`, {
+        status: newStatus,
+      });
+      loadOrders(); // Reload orders to show updated status
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      alert("Failed to update order status");
+    }
+  };
+
   const getStatusClass = (status) => {
     switch (status?.toLowerCase()) {
       case "delivered":
@@ -60,12 +86,6 @@ const Orders = () => {
         return "flag-red";
     }
   };
-
-  const totalRevenue = orders.reduce(
-    (sum, order) => sum + (order.total || 0),
-    0,
-  );
-  const avgOrderValue = orders.length ? totalRevenue / orders.length : 0;
 
   if (loading) {
     return <div className="loading">Loading orders...</div>;
@@ -187,11 +207,25 @@ const Orders = () => {
                   </td>
                   <td>{order.paymentMethod}</td>
                   <td>
-                    <span
-                      className={`flag-badge ${getStatusClass(order.status)}`}
+                    <select
+                      value={order.status || "pending"}
+                      onChange={(e) =>
+                        updateOrderStatus(order._id, e.target.value)
+                      }
+                      style={{
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        border: "1px solid var(--border-color)",
+                        backgroundColor: "var(--input-bg)",
+                        color: "var(--text-white)",
+                        fontSize: "0.8rem",
+                      }}
                     >
-                      {order.status?.toUpperCase() || "PENDING"}
-                    </span>
+                      <option value="pending">PENDING</option>
+                      <option value="shipped">SHIPPED</option>
+                      <option value="delivered">DELIVERED</option>
+                      <option value="cancelled">CANCELLED</option>
+                    </select>
                   </td>
                   <td>{formatDate(order.createdAt)}</td>
                 </tr>

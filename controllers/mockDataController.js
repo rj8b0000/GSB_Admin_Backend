@@ -78,8 +78,7 @@ exports.addMockData = async (req, res) => {
         category: "Meditation",
         accessLevel: "Free",
         youtubeLink: "https://youtube.com/watch?v=example1",
-        thumbnailUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/thumbnails/meditation1.jpg",
+        thumbnailUrl: null,
       },
       {
         title: "Advanced Strength Training",
@@ -88,8 +87,7 @@ exports.addMockData = async (req, res) => {
         category: "Fitness",
         accessLevel: "Paid",
         youtubeLink: "https://youtube.com/watch?v=example2",
-        videoUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/videos/strength.mp4",
+        videoUrl: null,
       },
       {
         title: "Nutrition Basics",
@@ -121,30 +119,25 @@ exports.addMockData = async (req, res) => {
         title: "7-Day Weight Loss Diet Plan",
         description:
           "A comprehensive 7-day meal plan designed for healthy weight loss.",
-        pdfUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/diet-plans/weight-loss-7-day.pdf",
-        thumbnailUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/thumbnails/diet1.jpg",
+        pdfUrl: null,
+        thumbnailUrl: null,
       },
       {
         title: "Muscle Building Nutrition Guide",
         description:
           "Complete nutrition guide for muscle building and strength training.",
-        pdfUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/diet-plans/muscle-building.pdf",
+        pdfUrl: null,
       },
       {
         title: "Vegetarian Fitness Diet",
         description: "Plant-based diet plan for fitness enthusiasts.",
-        pdfUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/diet-plans/vegetarian.pdf",
+        pdfUrl: null,
       },
       {
         title: "Post-Workout Recovery Meals",
         description:
           "Optimal meals for post-workout recovery and muscle repair.",
-        pdfUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/diet-plans/recovery.pdf",
+        pdfUrl: null,
       },
     ]);
 
@@ -157,8 +150,7 @@ exports.addMockData = async (req, res) => {
         price: 2999,
         salePrice: 2499,
         stock: 50,
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/products/whey-protein.jpg",
+        imageUrl: null,
         ingredients: ["Whey Protein Isolate", "Natural Flavors", "Stevia"],
         benefits: ["Muscle Building", "Quick Recovery", "High Protein"],
         status: "In Stock",
@@ -168,8 +160,7 @@ exports.addMockData = async (req, res) => {
         description: "Complete multivitamin supplement for daily nutrition.",
         price: 1499,
         stock: 25,
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/products/multivitamin.jpg",
+        imageUrl: null,
         ingredients: ["Vitamin A", "Vitamin C", "Vitamin D", "Minerals"],
         benefits: ["Immune Support", "Energy Boost", "Overall Health"],
         status: "In Stock",
@@ -180,8 +171,7 @@ exports.addMockData = async (req, res) => {
           "Branched-chain amino acids for workout energy and recovery.",
         price: 1999,
         stock: 8,
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/products/bcaa.jpg",
+        imageUrl: null,
         ingredients: ["L-Leucine", "L-Isoleucine", "L-Valine", "Caffeine"],
         benefits: ["Energy Boost", "Muscle Recovery", "Endurance"],
         status: "Low Stock",
@@ -192,8 +182,7 @@ exports.addMockData = async (req, res) => {
           "High-potency omega-3 fatty acids for heart and brain health.",
         price: 1799,
         stock: 0,
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/products/omega3.jpg",
+        imageUrl: null,
         ingredients: ["Fish Oil", "EPA", "DHA", "Vitamin E"],
         benefits: ["Heart Health", "Brain Function", "Anti-inflammatory"],
         status: "Out of Stock",
@@ -335,6 +324,7 @@ exports.addMockData = async (req, res) => {
         transactionId: "TXN123456789",
         subscriptionType: "monthly",
         source: "app",
+        paymentType: "subscription",
         status: "completed",
       },
       {
@@ -344,6 +334,7 @@ exports.addMockData = async (req, res) => {
         transactionId: "TXN123456790",
         subscriptionType: "yearly",
         source: "web",
+        paymentType: "subscription",
         status: "completed",
       },
       {
@@ -353,7 +344,41 @@ exports.addMockData = async (req, res) => {
         transactionId: "TXN123456791",
         subscriptionType: "monthly",
         source: "manual",
+        paymentType: "subscription",
         status: "completed",
+      },
+      {
+        user: mockUsers[3]._id,
+        amount: 2499,
+        paymentMethod: "UPI",
+        transactionId: "TXN123456792",
+        subscriptionType: "monthly",
+        source: "app",
+        paymentType: "product",
+        status: "completed",
+        description: "Whey Protein Powder",
+      },
+      {
+        user: mockUsers[4]._id,
+        amount: 1599,
+        paymentMethod: "Credit Card",
+        transactionId: "TXN123456793",
+        subscriptionType: "monthly",
+        source: "web",
+        paymentType: "product",
+        status: "completed",
+        description: "Premium Yoga Mat",
+      },
+      {
+        user: mockUsers[0]._id,
+        amount: 3299,
+        paymentMethod: "Net Banking",
+        transactionId: "TXN123456794",
+        subscriptionType: "monthly",
+        source: "web",
+        paymentType: "product",
+        status: "completed",
+        description: "Mass Gainer Chocolate",
       },
     ]);
 
@@ -363,38 +388,33 @@ exports.addMockData = async (req, res) => {
         user: mockUsers[0]._id,
         title: "Morning Workout Complete",
         description: "Completed 45 minutes of cardio and strength training.",
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/workout1.jpg",
+        imageUrl: null,
       },
       {
         user: mockUsers[1]._id,
         title: "Healthy Breakfast",
         description: "Started the day with oats, fruits, and protein shake.",
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/breakfast1.jpg",
+        imageUrl: null,
       },
       {
         user: mockUsers[3]._id,
         title: "Evening Yoga Session",
         description: "Relaxing yoga session to end the day peacefully.",
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/yoga1.jpg",
+        imageUrl: null,
       },
       {
         user: mockUsers[2]._id,
         title: "Post-Workout Meal",
         description:
           "Prepared a high-protein meal after my strength training session.",
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/meal1.jpg",
+        imageUrl: null,
       },
       {
         user: mockUsers[4]._id,
         title: "Weekly Progress Photo",
         description:
           "Seeing great improvements in my muscle definition after 6 weeks.",
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/daily-updates/progress1.jpg",
+        imageUrl: null,
       },
     ]);
 
@@ -405,40 +425,32 @@ exports.addMockData = async (req, res) => {
         title: "My 20kg Weight Loss Journey",
         description:
           "After 6 months of following GSB programs, I lost 20kg and gained confidence. The diet plans and workout videos were game changers for me.",
-        beforeImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before1.jpg",
-        afterImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after1.jpg",
+        beforeImageUrl: null,
+        afterImageUrl: null,
       },
       {
         user: mockUsers[1]._id,
         title: "From Skinny to Strong",
         description:
           "I gained 15kg of lean muscle mass in 8 months. The nutrition guidance and workout plans helped me achieve my dream physique.",
-        beforeImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before2.jpg",
-        afterImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after2.jpg",
+        beforeImageUrl: null,
+        afterImageUrl: null,
       },
       {
         user: mockUsers[3]._id,
         title: "Transformation After Pregnancy",
         description:
           "Lost 25kg post-pregnancy with GSB's safe and effective programs. Now I'm stronger than ever before!",
-        beforeImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before3.jpg",
-        afterImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after3.jpg",
+        beforeImageUrl: null,
+        afterImageUrl: null,
       },
       {
         user: mockUsers[4]._id,
         title: "Overcoming Lifestyle Diseases",
         description:
           "Reversed my diabetes and high blood pressure through proper diet and exercise. GSB saved my life!",
-        beforeImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/before4.jpg",
-        afterImageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/stories/after4.jpg",
+        beforeImageUrl: null,
+        afterImageUrl: null,
       },
     ]);
 
@@ -615,6 +627,84 @@ exports.addMockData = async (req, res) => {
         paymentMethod: "Credit Card",
         total: 8296,
         status: "shipped",
+      },
+      {
+        userId: mockUsers[0]._id,
+        items: [
+          {
+            productId: "pre-workout-001",
+            name: "Pre-Workout Energy Boost",
+            price: 2799,
+            quantity: 1,
+          },
+          {
+            productId: "protein-bar-001",
+            name: "Protein Energy Bars (Pack of 12)",
+            price: 1299,
+            quantity: 2,
+          },
+        ],
+        contactInfo: {
+          name: "Raj Patel",
+          phone: "+919876543210",
+          address: "123 MG Road, Mumbai, Maharashtra 400001",
+        },
+        paymentMethod: "Net Banking",
+        total: 5397,
+        status: "delivered",
+        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+      },
+      {
+        userId: mockUsers[2]._id,
+        items: [
+          {
+            productId: "mass-gainer-001",
+            name: "Mass Gainer Chocolate",
+            price: 3299,
+            quantity: 1,
+          },
+        ],
+        contactInfo: {
+          name: "Arjun Singh",
+          phone: "+919876543212",
+          address: "789 Brigade Road, Bangalore, Karnataka 560025",
+        },
+        paymentMethod: "UPI",
+        total: 3299,
+        status: "pending",
+        createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+      },
+      {
+        userId: mockUsers[3]._id,
+        items: [
+          {
+            productId: "yoga-mat-001",
+            name: "Premium Yoga Mat",
+            price: 1599,
+            quantity: 1,
+          },
+          {
+            productId: "resistance-bands-001",
+            name: "Resistance Bands Set",
+            price: 899,
+            quantity: 1,
+          },
+          {
+            productId: "water-bottle-001",
+            name: "Steel Water Bottle 1L",
+            price: 699,
+            quantity: 2,
+          },
+        ],
+        contactInfo: {
+          name: "Neha Gupta",
+          phone: "+919876543213",
+          address: "321 CP Market, New Delhi, Delhi 110001",
+        },
+        paymentMethod: "Credit Card",
+        total: 3896,
+        status: "shipped",
+        createdAt: new Date(), // Today
       },
     ]);
 
