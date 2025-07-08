@@ -103,3 +103,29 @@ exports.getAllStories = async (req, res) => {
       .json({ message: "Failed to fetch stories", error: error.message });
   }
 };
+
+exports.cleanupDemoStories = async (req, res) => {
+  try {
+    // Remove all stories with demo bucket URLs
+    const result = await Story.deleteMany({
+      $or: [
+        { beforeImageUrl: { $regex: "demo-gsb-bucket" } },
+        { afterImageUrl: { $regex: "demo-gsb-bucket" } },
+      ],
+    });
+
+    console.log(`Cleaned up ${result.deletedCount} demo stories`);
+
+    res.status(200).json({
+      message: `Successfully cleaned up ${result.deletedCount} demo stories`,
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message: "Failed to cleanup demo stories",
+        error: error.message,
+      });
+  }
+};
