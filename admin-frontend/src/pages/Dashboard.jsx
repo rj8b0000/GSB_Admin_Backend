@@ -243,11 +243,22 @@ const Dashboard = () => {
       <div className="charts-grid">
         <div className="chart-card">
           <h3>Payment Sources</h3>
-          {paymentData ? (
-            <Doughnut data={paymentData} options={doughnutOptions} />
-          ) : (
-            <div>No payment data available</div>
-          )}
+          <div
+            style={{
+              height: "300px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {paymentData ? (
+              <Doughnut data={paymentData} options={doughnutOptions} />
+            ) : (
+              <div style={{ color: "#999", textAlign: "center" }}>
+                <p>Loading payment data...</p>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="chart-card">
