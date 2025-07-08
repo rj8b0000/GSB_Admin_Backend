@@ -1071,6 +1071,76 @@ const Videos = () => {
           </div>
         </div>
       </div>
+
+      {/* Video Player Modal */}
+      {showVideoPlayer && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.9)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+          onClick={() => setShowVideoPlayer(false)}
+        >
+          <div
+            style={{
+              width: "90%",
+              maxWidth: "800px",
+              maxHeight: "90%",
+              backgroundColor: "#000",
+              borderRadius: "8px",
+              overflow: "hidden",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              style={{
+                padding: "10px",
+                backgroundColor: "var(--card-bg)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h3 style={{ color: "var(--text-white)", margin: 0 }}>
+                Video Player
+              </h3>
+              <button
+                onClick={() => setShowVideoPlayer(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--text-white)",
+                  fontSize: "20px",
+                  cursor: "pointer",
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <video
+              src={currentVideoUrl}
+              controls
+              autoPlay
+              style={{
+                width: "100%",
+                height: "auto",
+                maxHeight: "70vh",
+                display: "block",
+              }}
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
