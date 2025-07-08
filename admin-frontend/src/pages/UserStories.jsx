@@ -144,6 +144,10 @@ const UserStories = () => {
                       alt="Before"
                       className="story-image"
                       onError={(e) => {
+                        console.error(
+                          "Failed to load before image:",
+                          story.beforeImageUrl,
+                        );
                         e.target.style.display = "none";
                         e.target.nextSibling.style.display = "block";
                       }}
@@ -167,6 +171,10 @@ const UserStories = () => {
                       alt="After"
                       className="story-image"
                       onError={(e) => {
+                        console.error(
+                          "Failed to load after image:",
+                          story.afterImageUrl,
+                        );
                         e.target.style.display = "none";
                         e.target.nextSibling.style.display = "block";
                       }}
