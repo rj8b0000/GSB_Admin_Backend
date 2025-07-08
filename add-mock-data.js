@@ -133,24 +133,24 @@ async function addMockData() {
         title: "7-Day Weight Loss Diet Plan",
         description:
           "A comprehensive 7-day meal plan designed for healthy weight loss.",
-        pdfUrl: "https://example.com/diet-plan-1.pdf",
+        pdfUrl: null,
       },
       {
         title: "Muscle Building Nutrition Guide",
         description:
           "Complete nutrition guide for muscle building and strength training.",
-        pdfUrl: "https://example.com/diet-plan-2.pdf",
+        pdfUrl: null,
       },
       {
         title: "Vegetarian Fitness Diet",
         description: "Plant-based diet plan for fitness enthusiasts.",
-        pdfUrl: "https://example.com/diet-plan-3.pdf",
+        pdfUrl: null,
       },
       {
         title: "Post-Workout Recovery Meals",
         description:
           "Optimal meals for post-workout recovery and muscle repair.",
-        pdfUrl: "https://example.com/diet-plan-4.pdf",
+        pdfUrl: null,
       },
     ]);
     console.log("✅ Added mock diet plans");
@@ -164,7 +164,7 @@ async function addMockData() {
         price: 2999,
         salePrice: 2499,
         stock: 50,
-        imageUrl: "https://example.com/whey-protein.jpg",
+        imageUrl: null,
         ingredients: ["Whey Protein Isolate", "Natural Flavors", "Stevia"],
         benefits: ["Muscle Building", "Quick Recovery", "High Protein"],
         status: "In Stock",
@@ -174,7 +174,7 @@ async function addMockData() {
         description: "Complete multivitamin supplement for daily nutrition.",
         price: 1499,
         stock: 25,
-        imageUrl: "https://example.com/multivitamin.jpg",
+        imageUrl: null,
         ingredients: ["Vitamin A", "Vitamin C", "Vitamin D", "Minerals"],
         benefits: ["Immune Support", "Energy Boost", "Overall Health"],
         status: "In Stock",
@@ -185,7 +185,7 @@ async function addMockData() {
           "Branched-chain amino acids for workout energy and recovery.",
         price: 1999,
         stock: 8,
-        imageUrl: "https://example.com/bcaa.jpg",
+        imageUrl: null,
         ingredients: ["L-Leucine", "L-Isoleucine", "L-Valine", "Caffeine"],
         benefits: ["Energy Boost", "Muscle Recovery", "Endurance"],
         status: "Low Stock",
@@ -196,7 +196,7 @@ async function addMockData() {
           "High-potency omega-3 fatty acids for heart and brain health.",
         price: 1799,
         stock: 0,
-        imageUrl: "https://example.com/omega3.jpg",
+        imageUrl: null,
         ingredients: ["Fish Oil", "EPA", "DHA", "Vitamin E"],
         benefits: ["Heart Health", "Brain Function", "Anti-inflammatory"],
         status: "Out of Stock",
