@@ -87,12 +87,6 @@ const Orders = () => {
     }
   };
 
-  const totalRevenue = orders.reduce(
-    (sum, order) => sum + (order.total || 0),
-    0,
-  );
-  const avgOrderValue = orders.length ? totalRevenue / orders.length : 0;
-
   if (loading) {
     return <div className="loading">Loading orders...</div>;
   }
