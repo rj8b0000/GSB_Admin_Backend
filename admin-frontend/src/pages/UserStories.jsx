@@ -132,10 +132,20 @@ const UserStories = () => {
                       src={story.beforeImageUrl}
                       alt="Before"
                       className="story-image"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "block";
+                      }}
                     />
-                  ) : (
-                    <div className="no-image">No before image</div>
-                  )}
+                  ) : null}
+                  <div
+                    className="no-image"
+                    style={{ display: story.beforeImageUrl ? "none" : "block" }}
+                  >
+                    {story.beforeImageUrl
+                      ? "Image failed to load"
+                      : "No before image"}
+                  </div>
                 </div>
 
                 <div className="image-section">
@@ -145,10 +155,20 @@ const UserStories = () => {
                       src={story.afterImageUrl}
                       alt="After"
                       className="story-image"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "block";
+                      }}
                     />
-                  ) : (
-                    <div className="no-image">No after image</div>
-                  )}
+                  ) : null}
+                  <div
+                    className="no-image"
+                    style={{ display: story.afterImageUrl ? "none" : "block" }}
+                  >
+                    {story.afterImageUrl
+                      ? "Image failed to load"
+                      : "No after image"}
+                  </div>
                 </div>
               </div>
             </div>
