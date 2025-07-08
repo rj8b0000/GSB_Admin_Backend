@@ -18,8 +18,13 @@ const DailyUpdateSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String,
-    required: true,
-    match: [/^https?:\/\/[^\s$.?#].[^\s]*$/, "Invalid URL format for imageUrl"],
+    required: false,
+    validate: {
+      validator: function (v) {
+        return !v || /^https?:\/\/[^\s$.?#].[^\s]*$/.test(v);
+      },
+      message: "Invalid URL format for imageUrl",
+    },
   },
   createdAt: { type: Date, default: Date.now },
 });
