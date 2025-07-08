@@ -58,6 +58,25 @@ const DailyUpdates = () => {
     ).length;
   };
 
+  const cleanupDemoData = async () => {
+    if (
+      window.confirm(
+        "Are you sure you want to remove all demo daily updates with broken images? This action cannot be undone.",
+      )
+    ) {
+      try {
+        const response = await axios.delete(
+          `${API_BASE}/daily-updates/cleanup-demo/all`,
+        );
+        alert(response.data.message);
+        loadDailyUpdates(); // Reload the updates after cleanup
+      } catch (error) {
+        console.error("Error cleaning up demo daily updates:", error);
+        alert("Failed to cleanup demo data. Please try again.");
+      }
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading daily updates...</div>;
   }
@@ -67,6 +86,9 @@ const DailyUpdates = () => {
       <div className="page-header">
         <h1 className="page-title-main">Daily Updates Management</h1>
         <div className="filter-controls">
+          <button className="btn btn-secondary" onClick={cleanupDemoData}>
+            🧹 Clean Demo Data
+          </button>
           <button className="btn btn-primary" onClick={loadDailyUpdates}>
             <RefreshCw size={16} />
             Refresh
