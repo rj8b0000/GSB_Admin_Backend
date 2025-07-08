@@ -137,8 +137,7 @@ exports.addMockData = async (req, res) => {
         title: "Post-Workout Recovery Meals",
         description:
           "Optimal meals for post-workout recovery and muscle repair.",
-        pdfUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/diet-plans/recovery.pdf",
+        pdfUrl: null,
       },
     ]);
 
@@ -151,8 +150,7 @@ exports.addMockData = async (req, res) => {
         price: 2999,
         salePrice: 2499,
         stock: 50,
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/products/whey-protein.jpg",
+        imageUrl: null,
         ingredients: ["Whey Protein Isolate", "Natural Flavors", "Stevia"],
         benefits: ["Muscle Building", "Quick Recovery", "High Protein"],
         status: "In Stock",
@@ -162,8 +160,7 @@ exports.addMockData = async (req, res) => {
         description: "Complete multivitamin supplement for daily nutrition.",
         price: 1499,
         stock: 25,
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/products/multivitamin.jpg",
+        imageUrl: null,
         ingredients: ["Vitamin A", "Vitamin C", "Vitamin D", "Minerals"],
         benefits: ["Immune Support", "Energy Boost", "Overall Health"],
         status: "In Stock",
@@ -174,8 +171,7 @@ exports.addMockData = async (req, res) => {
           "Branched-chain amino acids for workout energy and recovery.",
         price: 1999,
         stock: 8,
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/products/bcaa.jpg",
+        imageUrl: null,
         ingredients: ["L-Leucine", "L-Isoleucine", "L-Valine", "Caffeine"],
         benefits: ["Energy Boost", "Muscle Recovery", "Endurance"],
         status: "Low Stock",
@@ -186,8 +182,7 @@ exports.addMockData = async (req, res) => {
           "High-potency omega-3 fatty acids for heart and brain health.",
         price: 1799,
         stock: 0,
-        imageUrl:
-          "https://demo-gsb-bucket.s3.ap-south-1.amazonaws.com/products/omega3.jpg",
+        imageUrl: null,
         ingredients: ["Fish Oil", "EPA", "DHA", "Vitamin E"],
         benefits: ["Heart Health", "Brain Function", "Anti-inflammatory"],
         status: "Out of Stock",
