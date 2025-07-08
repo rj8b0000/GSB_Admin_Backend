@@ -19,7 +19,7 @@ ChartJS.register(
   Legend,
   CategoryScale,
   LinearScale,
-  BarElement
+  BarElement,
 );
 
 const Dashboard = () => {
@@ -55,7 +55,7 @@ const Dashboard = () => {
       const users = response.data.users || [];
 
       const greenFlagUsers = users.filter(
-        (user) => user.flag === "green"
+        (user) => user.flag === "green",
       ).length;
 
       setStats((prev) => ({
@@ -96,13 +96,13 @@ const Dashboard = () => {
         totalPayments: analytics.totalPayments || 0,
       }));
 
-      // Prepare payment source chart data
-      const sources = analytics.paymentSources || {};
+      // Prepare payment type chart data
+      const paymentTypes = analytics.paymentTypes || {};
       setPaymentData({
         labels: ["Subscriptions", "Products"],
         datasets: [
           {
-            data: [sources.app || 0, sources.web],
+            data: [paymentTypes.subscription || 0, paymentTypes.product || 0],
             backgroundColor: ["#D4AF37", "#FFD700"],
             borderWidth: 0,
           },
