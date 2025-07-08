@@ -60,6 +60,19 @@ const Orders = () => {
   const completedOrders = orders.filter(
     (order) => order.status === "delivered",
   ).length;
+  const avgOrderValue = orders.length ? totalRevenue / orders.length : 0;
+
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      await axios.put(`${API_BASE}/orders/${orderId}/status`, {
+        status: newStatus,
+      });
+      loadOrders(); // Reload orders to show updated status
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      alert("Failed to update order status");
+    }
+  };
 
   const getStatusClass = (status) => {
     switch (status?.toLowerCase()) {
