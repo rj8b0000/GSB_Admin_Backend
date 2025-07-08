@@ -29,7 +29,7 @@ exports.createPayment = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       userId,
       { subscribed: true },
-      { new: true } // Return the updated user document
+      { new: true }, // Return the updated user document
     );
 
     // Check if user exists
@@ -90,6 +90,28 @@ exports.getPaymentAnalytics = async (req, res) => {
       status: "completed",
     });
 
+    // Payment type analytics (subscription vs product)
+    const subscriptionPayments = await Payment.countDocuments({
+      paymentType: "subscription",
+      status: "completed",
+    });
+    const productPayments = await Payment.countDocuments({
+      paymentType: "product",
+      status: "completed",
+    });
+
+    // Revenue by payment type
+    const revenueByPaymentType = await Payment.aggregate([
+      { $match: { status: "completed" } },
+      {
+        $group: {
+          _id: "$paymentType",
+          total: { $sum: "$amount" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
     // Revenue by source
     const revenueBySource = await Payment.aggregate([
       { $match: { status: "completed" } },
@@ -128,12 +150,17 @@ exports.getPaymentAnalytics = async (req, res) => {
           web: webPayments,
           manual: manualPayments,
         },
+        paymentTypes: {
+          subscription: subscriptionPayments,
+          product: productPayments,
+        },
         subscriptionTypes: {
           monthly: monthlySubscriptions,
           yearly: yearlySubscriptions,
           lifetime: lifetimeSubscriptions,
         },
         revenueBySource,
+        revenueByPaymentType,
         monthlyRevenue,
       },
     });
