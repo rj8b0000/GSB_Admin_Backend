@@ -140,13 +140,15 @@ const Dashboard = () => {
     try {
       console.log("Creating test payment data...");
       // Add some test payments by calling the mock data endpoint
-      const response = await axios.post(`${API_BASE}/mock-data/add`);
+      const response = await axios.post(`${API_BASE}/mock/add-mock-data`);
       console.log("Test data created:", response.data);
       alert("Test payment data created successfully!");
       loadDashboardData(); // Reload dashboard
     } catch (error) {
       console.error("Error creating test payment data:", error);
-      alert("Failed to create test data");
+      alert(
+        `Failed to create test data: ${error.response?.data?.message || error.message}`,
+      );
     }
   };
 
