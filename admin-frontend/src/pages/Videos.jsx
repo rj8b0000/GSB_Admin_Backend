@@ -61,7 +61,7 @@ const Videos = () => {
 
     if (categoryFilter) {
       filtered = filtered.filter(
-        (video) => video.category.categoryId === categoryFilter,
+        (video) => video.category?.categoryId === categoryFilter,
       );
     }
 
