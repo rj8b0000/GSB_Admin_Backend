@@ -58,11 +58,16 @@ exports.getAllPayments = async (req, res) => {
 // Get payment analytics
 exports.getPaymentAnalytics = async (req, res) => {
   try {
+    console.log("Payment analytics endpoint called");
+
     const totalPayments = await Payment.countDocuments({ status: "completed" });
+    console.log("Total completed payments:", totalPayments);
+
     const totalRevenue = await Payment.aggregate([
       { $match: { status: "completed" } },
       { $group: { _id: null, total: { $sum: "$amount" } } },
     ]);
+    console.log("Total revenue aggregation:", totalRevenue);
 
     const appPayments = await Payment.countDocuments({
       source: "app",
