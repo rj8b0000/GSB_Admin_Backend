@@ -87,8 +87,11 @@ const Dashboard = () => {
 
   const loadPaymentStats = async () => {
     try {
+      console.log("Loading payment analytics...");
       const response = await axios.get(`${API_BASE}/payments/analytics`);
       const analytics = response.data.analytics || {};
+
+      console.log("Payment analytics response:", analytics);
 
       setStats((prev) => ({
         ...prev,
@@ -98,7 +101,9 @@ const Dashboard = () => {
 
       // Prepare payment type chart data
       const paymentTypes = analytics.paymentTypes || {};
-      setPaymentData({
+      console.log("Payment types data:", paymentTypes);
+
+      const chartData = {
         labels: ["Subscriptions", "Products"],
         datasets: [
           {
@@ -107,9 +112,23 @@ const Dashboard = () => {
             borderWidth: 0,
           },
         ],
-      });
+      };
+
+      console.log("Setting payment chart data:", chartData);
+      setPaymentData(chartData);
     } catch (error) {
       console.error("Error loading payment stats:", error);
+      // Set empty data so chart still shows
+      setPaymentData({
+        labels: ["Subscriptions", "Products"],
+        datasets: [
+          {
+            data: [0, 0],
+            backgroundColor: ["#D4AF37", "#FFD700"],
+            borderWidth: 0,
+          },
+        ],
+      });
     }
   };
 
