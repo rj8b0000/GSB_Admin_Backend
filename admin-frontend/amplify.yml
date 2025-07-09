@@ -10,7 +10,7 @@ frontend:
         - npm run build
     postBuild:
       commands:
-        - echo "Build completed successfully"
+        - echo "Build completed"
   artifacts:
     baseDirectory: admin-frontend/dist
     files:
