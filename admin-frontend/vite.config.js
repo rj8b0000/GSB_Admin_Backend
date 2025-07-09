@@ -4,6 +4,7 @@ import { websocketFix } from "./vite-websocket-fix.js";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/",
   plugins: [react(), websocketFix()],
   server: {
     port: 3001,
