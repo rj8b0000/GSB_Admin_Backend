@@ -29,6 +29,8 @@ const allowedOrigins = [
   "https://apis.gsbpathy.com/",
   "https://main.d13yqss2i4o49v.amplifyapp.com", // Add your Amplify app origin
   "https://main.d13yqss2i4o49v.amplifyapp.com/", // Add your Amplify app origin
+  "https://admin.gsbpathy.com",
+  "https://admin.gsbpathy.com/",
 ];
 
 app.use(
