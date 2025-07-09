@@ -25,8 +25,14 @@ connectDB()
 // CORS configuration for React frontend
 app.use(
   cors({
-    origin: ["http://localhost:3001", "http://127.0.0.1:3001"],
-    credentials: true,
+    origin: [
+      "http://localhost:3002",
+      "http://localhost:3001",
+      "http://13.235.77.158:3000",
+    ], // Allow frontend origins
+    credentials: true, // If using cookies or auth headers
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
   })
 );
 app.use(express.json());

@@ -39,7 +39,7 @@ exports.loginAdmin = async (req, res) => {
       const token = jwt.sign(
         { email, role: "super-admin" },
         process.env.JWT_SECRET,
-        { expiresIn: "1d" },
+        { expiresIn: "1d" }
       );
       return res.status(200).json({ token });
     }
@@ -124,7 +124,7 @@ exports.verifyOTP = async (req, res) => {
         role: "user",
       },
       process.env.JWT_SECRET,
-      { expiresIn: "30d" },
+      { expiresIn: "30d" }
     );
 
     // Clear OTP after successful verification
