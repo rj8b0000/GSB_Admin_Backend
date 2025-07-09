@@ -28,22 +28,25 @@ const allowedOrigins = [
   "http://127.0.0.1:3001",
   "https://apis.gsbpathy.com/",
   "https://main.d13yqss2i4o49v.amplifyapp.com", // Add your Amplify app origin
+  "https://main.d13yqss2i4o49v.amplifyapp.com/", // Add your Amplify app origin
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl requests)
+      console.log("Request Origin:", origin); // Log the origin
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) {
+        console.log("Origin allowed:", origin);
         return callback(null, true);
       } else {
+        console.log("Origin blocked:", origin);
         return callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Explicitly allow methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(express.json());
