@@ -26,6 +26,7 @@ connectDB()
 const allowedOrigins = [
   "http://localhost:3001",
   "http://127.0.0.1:3001",
+  "https://apis.gsbpathy.com/",
   "https://main.d13yqss2i4o49v.amplifyapp.com", // Add your Amplify app origin
 ];
 
