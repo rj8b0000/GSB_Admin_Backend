@@ -33,22 +33,22 @@ const allowedOrigins = [
   "https://admin.gsbpathy.com/",
 ];
 
+// Configure CORS middleware to handle dynamic origins
 app.use(
   cors({
-    origin: (origin, callback) => {
-      console.log("Request Origin:", origin); // Log the origin
+    origin: function (origin, callback) {
+      console.log("Request origin:", origin); // Log the origin of each request
+      // Allow requests with no origin (e.g., mobile apps, curl)
       if (!origin) return callback(null, true);
+
       if (allowedOrigins.includes(origin)) {
-        console.log("Origin allowed:", origin);
-        return callback(null, true);
+        callback(null, true);
       } else {
-        console.log("Origin blocked:", origin);
-        return callback(new Error("Not allowed by CORS"));
+        console.log("Blocked by CORS: origin not allowed"); // Log if the origin is blocked
+        callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // Allow credentials if needed
   })
 );
 app.use(express.json());
