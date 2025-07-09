@@ -27,4 +27,7 @@ export default defineConfig({
       interval: 100,
     },
   },
+  build: {
+    outDir: "dist", // Ensure this matches your setup
+  },
 });
