@@ -1,7 +1,7 @@
 version: 1
 applications:
   - frontend:
-      appRoot: "admin-frontend"
+      appRoot: "/admin-frontend"
       phases:
         preBuild:
           commands:
