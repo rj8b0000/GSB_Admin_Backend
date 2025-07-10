@@ -31,7 +31,7 @@ exports.addDailyUpdate = async (req, res) => {
     // Populate user details in the response
     const populatedUpdate = await DailyUpdate.populate(
       "user",
-      "fullName email",
+      "fullName email"
     );
 
     res.status(201).json({
@@ -52,7 +52,7 @@ exports.addDailyUpdate = async (req, res) => {
 exports.getAllDailyUpdates = async (req, res) => {
   try {
     const dailyUpdates = await DailyUpdate.find()
-      .populate("user", "fullName email")
+      .populate("user", "fullName", "email")
       .sort({ createdAt: -1 });
 
     // Debug logging to check image URLs
@@ -104,7 +104,7 @@ exports.updateDailyUpdate = async (req, res) => {
     const dailyUpdate = await DailyUpdate.findByIdAndUpdate(
       id,
       { $set: updateData },
-      { new: true, runValidators: true },
+      { new: true, runValidators: true }
     ).populate("user", "fullName email");
 
     if (!BlaiseUpdate) {
@@ -162,11 +162,9 @@ exports.cleanupDemoDailyUpdates = async (req, res) => {
       deletedCount: result.deletedCount,
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Failed to cleanup demo daily updates",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Failed to cleanup demo daily updates",
+      error: error.message,
+    });
   }
 };
