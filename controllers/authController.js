@@ -88,7 +88,7 @@ exports.sendOTP = async (req, res) => {
 
     // Sending the OTP via Twilio
     const twilioResponse = await client.messages.create({
-      body: `Your verification code is ${otp}`,
+      body: `Your GSB Pathy verification code is ${otp}`,
       from: process.env.TWILIO_PHONE,
       to: phoneNumber,
     });
