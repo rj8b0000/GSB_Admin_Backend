@@ -168,3 +168,27 @@ exports.cleanupDemoDailyUpdates = async (req, res) => {
     });
   }
 };
+
+exports.getDailyUpdateOnUserId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const dailyUpdates = await DailyUpdate.find({ _id: id })
+      .populate("user", "fullName email")
+      .sort({ createdAt: -1 });
+    if (!dailyUpdates || dailyUpdates.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No daily updates found for this user" });
+    }
+    res.status(200).json({
+      message: "Daily updates fetched successfully",
+      count: dailyUpdates.length,
+      dailyUpdates,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch daily updates",
+      error: error.message,
+    });
+  }
+};

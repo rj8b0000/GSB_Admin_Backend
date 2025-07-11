@@ -9,7 +9,8 @@ router.put("/:id", uploadImage, dailyUpdateController.updateDailyUpdate);
 router.delete("/:id", dailyUpdateController.deleteDailyUpdate);
 router.delete(
   "/cleanup-demo/all",
-  dailyUpdateController.cleanupDemoDailyUpdates,
+  dailyUpdateController.cleanupDemoDailyUpdates
 );
+router.get("/:id", dailyUpdateController.getDailyUpdateOnUserId);
 
 module.exports = router;
