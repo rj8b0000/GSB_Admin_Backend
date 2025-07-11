@@ -14,7 +14,7 @@ connectDB()
     } else {
       console.log("⚠️  Server starting WITHOUT database connection");
       console.log(
-        "🔧 Database-dependent features will not work until MongoDB is connected"
+        "🔧 Database-dependent features will not work until MongoDB is connected",
       );
     }
   })
@@ -51,7 +51,7 @@ app.use(
       }
     },
     credentials: true, // Allow credentials if needed
-  })
+  }),
 );
 app.use(express.json());
 app.use(express.static("public"));
@@ -71,6 +71,7 @@ const cartRoutes = require("./routes/cartRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const dailyUpdateRoutes = require("./routes/dailyUpdateRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const easebuzzRoutes = require("./routes/easebuzzRoutes");
 const mockDataRoutes = require("./routes/mockDataRoutes");
 const departmentRoutes = require("./routes/departmentRoutes");
 const videoCategoryRoutes = require("./routes/videoCategoryRoutes");
@@ -89,6 +90,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/easebuzz", easebuzzRoutes);
 app.use("/api/mock", mockDataRoutes);
 app.use("/api/dept", departmentRoutes);
 app.use("/api/video-categories", videoCategoryRoutes);

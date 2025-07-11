@@ -9,9 +9,17 @@ const paymentSchema = new mongoose.Schema(
     transactionId: { type: String, required: true, unique: true },
     status: {
       type: String,
-      enum: ["pending", "completed", "failed"],
+      enum: ["pending", "completed", "failed", "refunded"],
       default: "pending",
     },
+    // Easebuzz specific fields
+    easebuzzPaymentId: { type: String },
+    bankRefNum: { type: String },
+    paymentMode: { type: String },
+    failureReason: { type: String },
+    refundAmount: { type: Number },
+    refundReason: { type: String },
+    refundDate: { type: Date },
     subscriptionType: {
       type: String,
       enum: ["monthly", "yearly", "lifetime"],
