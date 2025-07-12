@@ -1,6 +1,7 @@
 const Chat = require("../models/Chat");
 const TeamMember = require("../models/TeamMember");
 const mongoose = require("mongoose");
+const { uploadFileToS3 } = require("../services/s3Uploader");
 
 exports.createChat = async (req, res) => {
   try {
@@ -13,6 +14,7 @@ exports.createChat = async (req, res) => {
     });
 
     await newChat.save();
+    req.app.get("io").emit("newChat", newChat);
     res.status(201).json({ message: "Chat initiated", data: newChat });
   } catch (error) {
     res
@@ -54,6 +56,7 @@ exports.assignChat = async (req, res) => {
     member.assignedChats.push(chat._id);
     await member.save();
 
+    req.app.get("io").to(chatId).emit("chatAssigned", { chatId, memberId });
     res.status(200).json({ message: "Chat assigned successfully" });
   } catch (err) {
     res
@@ -96,8 +99,8 @@ exports.sendMessage = async (req, res) => {
       messages,
       chatType = "general",
     } = req.body;
+    const file = req.files?.media;
 
-    // Validate request body
     if (!customerName) {
       return res.status(400).json({ message: "Customer name is required" });
     }
@@ -109,25 +112,67 @@ exports.sendMessage = async (req, res) => {
         message: "Messages array with at least one message is required",
       });
     }
-    if (!messages[0].text || messages[0].text.trim() === "") {
-      return res.status(400).json({ message: "Message text is required" });
-    }
 
     let chat = await Chat.findOne({ customerEmail, status: "open" });
+
+    const message = {
+      sender: "customer",
+      text: messages[0].text?.trim() || "",
+      timestamp: new Date(),
+    };
+
+    if (file) {
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "video/mp4",
+        "video/mpeg",
+        "video/quicktime",
+        "application/pdf",
+      ];
+      if (!allowedTypes.includes(file.mimetype)) {
+        return res.status(400).json({
+          message:
+            "Invalid file type. Only images, videos, and PDFs are allowed.",
+        });
+      }
+
+      const folder = file.mimetype.startsWith("image")
+        ? "chat/images"
+        : file.mimetype.startsWith("video")
+        ? "chat/videos"
+        : "chat/pdfs";
+      const fileUrl = await uploadFileToS3(file, folder);
+      message.media = {
+        type: file.mimetype.startsWith("image")
+          ? "image"
+          : file.mimetype.startsWith("video")
+          ? "video"
+          : "pdf",
+        url: fileUrl,
+        fileName: file.originalname,
+        fileSize: file.size,
+      };
+    }
 
     if (!chat) {
       chat = await Chat.create({
         customerName,
         customerEmail,
         chatType,
-        messages: [{ sender: "customer", text: messages[0].text.trim() }],
+        messages: [message],
       });
     } else {
-      chat.messages.push({ sender: "customer", text: messages[0].text.trim() });
+      chat.messages.push(message);
       await chat.save();
     }
 
-    // Populate assignedTo in the response
+    req.app.get("io").to(chat._id.toString()).emit("newMessage", {
+      chatId: chat._id,
+      message,
+    });
+
     const populatedChat = await Chat.findById(chat._id).populate(
       "assignedTo",
       "fullName email department"
@@ -148,26 +193,69 @@ exports.sendMessage = async (req, res) => {
 exports.replyToChat = async (req, res) => {
   const { chatId } = req.params;
   const { text, agentId } = req.body;
+  const file = req.files?.media;
 
   try {
     if (!mongoose.Types.ObjectId.isValid(chatId)) {
       return res.status(400).json({ message: "Invalid chat ID format" });
     }
 
-    if (!text || text.trim() === "") {
-      return res.status(400).json({ message: "Message text is required" });
-    }
-
     const chat = await Chat.findById(chatId);
     if (!chat) return res.status(404).json({ message: "Chat not found" });
 
-    chat.messages.push({ sender: "agent", text: text.trim() });
+    const message = {
+      sender: "agent",
+      text: text?.trim() || "",
+      timestamp: new Date(),
+    };
+
+    if (file) {
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "video/mp4",
+        "video/mpeg",
+        "video/quicktime",
+        "application/pdf",
+      ];
+      if (!allowedTypes.includes(file.mimetype)) {
+        return res.status(400).json({
+          message:
+            "Invalid file type. Only images, videos, and PDFs are allowed.",
+        });
+      }
+
+      const folder = file.mimetype.startsWith("image")
+        ? "chat/images"
+        : file.mimetype.startsWith("video")
+        ? "chat/videos"
+        : "chat/pdfs";
+      const fileUrl = await uploadFileToS3(file, folder);
+      message.media = {
+        type: file.mimetype.startsWith("image")
+          ? "image"
+          : file.mimetype.startsWith("video")
+          ? "video"
+          : "pdf",
+        url: fileUrl,
+        fileName: file.originalname,
+        fileSize: file.size,
+      };
+    }
+
+    chat.messages.push(message);
 
     if (agentId && mongoose.Types.ObjectId.isValid(agentId)) {
       chat.assignedTo = agentId;
     }
 
     await chat.save();
+
+    req.app.get("io").to(chatId).emit("newMessage", {
+      chatId,
+      message,
+    });
 
     const populatedChat = await Chat.findById(chatId).populate(
       "assignedTo",
@@ -228,6 +316,7 @@ exports.markChatResolved = async (req, res) => {
       return res.status(404).json({ message: "Chat not found" });
     }
 
+    req.app.get("io").to(chatId).emit("chatResolved", { chatId });
     res.status(200).json({ message: "Chat marked as resolved", data: chat });
   } catch (err) {
     console.error("Error in markChatResolved:", err);
@@ -258,11 +347,12 @@ exports.markChatResolved = async (req, res) => {
 //       .json({ message: "Failed to create chat", error: error.message });
 //   }
 // };
+
 // exports.getAllChats = async (req, res) => {
 //   try {
 //     const chats = await Chat.find().populate(
 //       "assignedTo",
-//       "fullName email department",
+//       "fullName email department"
 //     );
 //     res
 //       .status(200)
@@ -325,11 +415,31 @@ exports.markChatResolved = async (req, res) => {
 //   }
 // };
 
-// // Create or continue a chat from user side
 // exports.sendMessage = async (req, res) => {
-//   const { customerName, customerEmail, text, chatType = "general" } = req.body;
-
 //   try {
+//     const {
+//       customerName,
+//       customerEmail,
+//       messages,
+//       chatType = "general",
+//     } = req.body;
+
+//     // Validate request body
+//     if (!customerName) {
+//       return res.status(400).json({ message: "Customer name is required" });
+//     }
+//     if (!customerEmail) {
+//       return res.status(400).json({ message: "Customer email is required" });
+//     }
+//     if (!messages || !Array.isArray(messages) || messages.length === 0) {
+//       return res.status(400).json({
+//         message: "Messages array with at least one message is required",
+//       });
+//     }
+//     if (!messages[0].text || messages[0].text.trim() === "") {
+//       return res.status(400).json({ message: "Message text is required" });
+//     }
+
 //     let chat = await Chat.findOne({ customerEmail, status: "open" });
 
 //     if (!chat) {
@@ -337,33 +447,40 @@ exports.markChatResolved = async (req, res) => {
 //         customerName,
 //         customerEmail,
 //         chatType,
-//         messages: [{ sender: "customer", text }],
+//         messages: [{ sender: "customer", text: messages[0].text.trim() }],
 //       });
 //     } else {
-//       chat.messages.push({ sender: "customer", text });
+//       chat.messages.push({ sender: "customer", text: messages[0].text.trim() });
 //       await chat.save();
 //     }
 
-//     res.status(200).json(chat);
+//     // Populate assignedTo in the response
+//     const populatedChat = await Chat.findById(chat._id).populate(
+//       "assignedTo",
+//       "fullName email department"
+//     );
+
+//     res.status(200).json({
+//       message: "Message sent successfully",
+//       data: populatedChat,
+//     });
 //   } catch (err) {
+//     console.error("Error in sendMessage:", err);
 //     res
 //       .status(500)
 //       .json({ message: "Failed to send message", error: err.message });
 //   }
 // };
 
-// // Admin reply
 // exports.replyToChat = async (req, res) => {
 //   const { chatId } = req.params;
 //   const { text, agentId } = req.body;
 
 //   try {
-//     // Validate ObjectId
 //     if (!mongoose.Types.ObjectId.isValid(chatId)) {
 //       return res.status(400).json({ message: "Invalid chat ID format" });
 //     }
 
-//     // Validate required fields
 //     if (!text || text.trim() === "") {
 //       return res.status(400).json({ message: "Message text is required" });
 //     }
@@ -373,34 +490,45 @@ exports.markChatResolved = async (req, res) => {
 
 //     chat.messages.push({ sender: "agent", text: text.trim() });
 
-//     // Only update assignedTo if agentId is provided and is a valid ObjectId
 //     if (agentId && mongoose.Types.ObjectId.isValid(agentId)) {
 //       chat.assignedTo = agentId;
 //     }
 
 //     await chat.save();
 
-//     res.status(200).json(chat);
+//     const populatedChat = await Chat.findById(chatId).populate(
+//       "assignedTo",
+//       "fullName email department"
+//     );
+
+//     res.status(200).json({
+//       message: "Reply sent successfully",
+//       data: populatedChat,
+//     });
 //   } catch (err) {
 //     console.error("Error in replyToChat:", err);
 //     res.status(500).json({ message: "Reply failed", error: err.message });
 //   }
 // };
 
-// // Get specific chat by ID
 // exports.getChatById = async (req, res) => {
 //   try {
 //     const { chatId } = req.params;
 
-//     // Validate ObjectId
 //     if (!mongoose.Types.ObjectId.isValid(chatId)) {
 //       return res.status(400).json({ message: "Invalid chat ID format" });
 //     }
 
-//     const chat = await Chat.findById(chatId).populate("assignedTo");
+//     const chat = await Chat.findById(chatId).populate(
+//       "assignedTo",
+//       "fullName email department"
+//     );
 //     if (!chat) return res.status(404).json({ message: "Chat not found" });
 
-//     res.status(200).json(chat);
+//     res.status(200).json({
+//       message: "Chat fetched successfully",
+//       data: chat,
+//     });
 //   } catch (err) {
 //     console.error("Error in getChatById:", err);
 //     res
@@ -409,12 +537,10 @@ exports.markChatResolved = async (req, res) => {
 //   }
 // };
 
-// // Resolve a chat
 // exports.markChatResolved = async (req, res) => {
 //   try {
 //     const { chatId } = req.params;
 
-//     // Validate ObjectId
 //     if (!mongoose.Types.ObjectId.isValid(chatId)) {
 //       return res.status(400).json({ message: "Invalid chat ID format" });
 //     }
@@ -422,14 +548,14 @@ exports.markChatResolved = async (req, res) => {
 //     const chat = await Chat.findByIdAndUpdate(
 //       chatId,
 //       { status: "resolved" },
-//       { new: true },
-//     );
+//       { new: true }
+//     ).populate("assignedTo", "fullName email department");
 
 //     if (!chat) {
 //       return res.status(404).json({ message: "Chat not found" });
 //     }
 
-//     res.status(200).json({ message: "Chat marked as resolved", chat });
+//     res.status(200).json({ message: "Chat marked as resolved", data: chat });
 //   } catch (err) {
 //     console.error("Error in markChatResolved:", err);
 //     res
