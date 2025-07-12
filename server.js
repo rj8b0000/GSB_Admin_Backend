@@ -10,11 +10,11 @@ const app = express();
 connectDB()
   .then((dbConnected) => {
     if (dbConnected) {
-      console.log("🚀 Server starting with database connection");
+      console.log("Server starting with database connection");
     } else {
-      console.log("⚠️  Server starting WITHOUT database connection");
+      console.log("⚠️Server starting WITHOUT database connection");
       console.log(
-        "🔧 Database-dependent features will not work until MongoDB is connected"
+        "Database-dependent features will not work until MongoDB is connected"
       );
     }
   })
@@ -135,8 +135,8 @@ app.get("/", (req, res) => {
 });
 
 app.listen(3000, "0.0.0.0", () => {
-  console.log("🚀 Server running on port 3000");
-  console.log("📱 Admin Panel: http://localhost:3000/admin");
-  console.log("🔍 Health Check: http://localhost:3000/api/health");
-  console.log("📋 API Status: http://localhost:3000/");
+  console.log("Server running on port 3000");
+  console.log("Admin Panel: http://localhost:3000/admin");
+  console.log("Health Check: http://localhost:3000/api/health");
+  console.log("API Status: http://localhost:3000/");
 });

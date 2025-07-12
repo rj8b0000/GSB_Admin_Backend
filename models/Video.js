@@ -36,7 +36,7 @@ const videoSchema = new mongoose.Schema({
   },
   accessLevel: {
     type: String,
-    enum: ["Free", "Paid"],
+    enum: ["Free", "Paid", "All"],
     default: "Free",
   },
   createdAt: { type: Date, default: Date.now },
