@@ -105,11 +105,9 @@ exports.sendMessage = async (req, res) => {
       return res.status(400).json({ message: "Customer email is required" });
     }
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      return res
-        .status(400)
-        .json({
-          message: "Messages array with at least one message is required",
-        });
+      return res.status(400).json({
+        message: "Messages array with at least one message is required",
+      });
     }
     if (!messages[0].text || messages[0].text.trim() === "") {
       return res.status(400).json({ message: "Message text is required" });

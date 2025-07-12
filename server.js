@@ -14,7 +14,7 @@ connectDB()
     } else {
       console.log("⚠️  Server starting WITHOUT database connection");
       console.log(
-        "🔧 Database-dependent features will not work until MongoDB is connected",
+        "🔧 Database-dependent features will not work until MongoDB is connected"
       );
     }
   })
@@ -51,9 +51,12 @@ app.use(
       }
     },
     credentials: true, // Allow credentials if needed
-  }),
+  })
 );
-app.use(express.json());
+app.use(express.json({ limit: "100mb" }));
+app.use(
+  express.urlencoded({ limit: "100mb", extended: true, parameterLimit: 50000 })
+);
 app.use(express.static("public"));
 dotenv.config();
 
