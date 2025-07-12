@@ -7,8 +7,7 @@
     "start": "node server.js",
     "dev": "node start-fullstack.js",
     "frontend": "cd admin-frontend && npm run dev",
-    "fullstack": "npm run dev",
-    "add-mock-data": "node add-mock-data.js"
+    "fullstack": "npm run dev"
   },
   "keywords": [],
   "author": "",
