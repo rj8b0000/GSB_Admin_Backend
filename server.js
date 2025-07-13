@@ -23,7 +23,7 @@ connectDB()
     } else {
       console.log("⚠️Server starting WITHOUT database connection");
       console.log(
-        "Database-dependent features will not work until MongoDB is connected",
+        "Database-dependent features will not work until MongoDB is connected"
       );
     }
   })
@@ -37,11 +37,11 @@ const allowedOrigins = [
   "http://localhost:3002",
   "http://127.0.0.1:3001",
   "https://apis.gsbpathy.com",
-  "https://main.d13yqss2i4o49v.amplifyapp.com",
+  "https://apis.gsbpathy.com/",
+  "https://main.d13yqss2i4o49v.amplifyapp.com", // Add your Amplify app origin
+  "https://main.d13yqss2i4o49v.amplifyapp.com/", // Add your Amplify app origin
   "https://admin.gsbpathy.com",
-  "https://74c479b6a8d640b4b7bb7800e74a8fe9-8ef734e1b71d48d881c634dc0.fly.dev",
-  "https://74c479b6a8d640b4b7bb7800e74a8fe9-d8916b10286a438ebde1b5aa5.fly.dev",
-  "https://74c479b6a8d640b4b7bb7800e74a8fe9-a36addc8dcd74549b827ef83b.fly.dev",
+  "https://admin.gsbpathy.com/",
 ];
 
 app.use(
@@ -57,11 +57,11 @@ app.use(
       }
     },
     credentials: true,
-  }),
+  })
 );
 app.use(express.json({ limit: "100mb" }));
 app.use(
-  express.urlencoded({ limit: "100mb", extended: true, parameterLimit: 50000 }),
+  express.urlencoded({ limit: "100mb", extended: true, parameterLimit: 50000 })
 );
 app.use(express.static("public"));
 dotenv.config();
