@@ -5,7 +5,6 @@ const Chat = require("../models/Chat");
 exports.addTeamMember = async (req, res) => {
   try {
     const { fullName, email, password, departmentId } = req.body;
-    const defaultPassword = password || "gsbpathy123";
 
     // Validate department IDs (accept single UUID or array of UUIDs)
     let departmentIds = [];
@@ -35,7 +34,7 @@ exports.addTeamMember = async (req, res) => {
     const newMember = new TeamMember({
       fullName,
       email,
-      password: defaultPassword,
+      password: password,
       department: departmentIds,
     });
 
@@ -58,9 +57,9 @@ exports.addTeamMember = async (req, res) => {
 
 exports.getAllTeamMembers = async (req, res) => {
   try {
-    const teamMembers = await TeamMember.find()
-      .populate("department", "departmentId name description")
-      .select("fullName email department");
+    const teamMembers = await TeamMember.find();
+    // .populate("department", "departmentId name description")
+    // .select("fullName email department");
     res.status(200).json({
       message: "Fetched team members successfully",
       count: teamMembers.length,
@@ -157,6 +156,129 @@ exports.updateTeamMember = async (req, res) => {
       .json({ message: "Failed to update team member", error: error.message });
   }
 };
+exports.updatePermissions = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { permissions, role } = req.body;
+
+    const updateData = { updatedAt: new Date() };
+    if (permissions) updateData.permissions = permissions;
+    if (role) updateData.role = role;
+
+    const teamMember = await TeamMember.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    }).populate("department", "departmentId name description");
+
+    if (!teamMember) {
+      return res.status(404).json({ message: "Team member not found" });
+    }
+
+    res.status(200).json({
+      message: "Permissions updated successfully",
+      data: teamMember,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to update permissions",
+      error: error.message,
+    });
+  }
+};
+
+exports.teamMemberLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const teamMember = await TeamMember.findOne({
+      email,
+      isActive: true,
+    }).populate("department", "departmentId name description");
+
+    if (!teamMember || teamMember.password !== password) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Update last login
+    teamMember.lastLogin = new Date();
+    await teamMember.save();
+
+    // Generate JWT token (you might want to use actual JWT here)
+    const token = Buffer.from(
+      JSON.stringify({
+        id: teamMember._id,
+        email: teamMember.email,
+        role: teamMember.role,
+        timestamp: Date.now(),
+      })
+    ).toString("base64");
+
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: teamMember._id,
+        fullName: teamMember.fullName,
+        email: teamMember.email,
+        role: teamMember.role,
+        permissions: teamMember.permissions,
+        department: teamMember.department,
+      },
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Login failed",
+      error: error.message,
+    });
+  }
+};
+
+exports.getCurrentTeamMember = async (req, res) => {
+  try {
+    // Extract team member ID from token
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+    let teamMemberId;
+
+    try {
+      // Decode the base64 token
+      const tokenPayload = JSON.parse(Buffer.from(token, "base64").toString());
+      teamMemberId = tokenPayload.id;
+    } catch (error) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    const teamMember = await TeamMember.findById(teamMemberId)
+      .populate("department", "departmentId name description")
+      .select("-password");
+
+    if (!teamMember || !teamMember.isActive) {
+      return res.status(404).json({ message: "Team member not found" });
+    }
+
+    res.status(200).json({
+      message: "Current team member fetched successfully",
+      user: {
+        id: teamMember._id,
+        fullName: teamMember.fullName,
+        email: teamMember.email,
+        role: teamMember.role,
+        permissions: teamMember.permissions,
+        department: teamMember.department,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch current team member",
+      error: error.message,
+    });
+  }
+};
+
 exports.deleteTeamMember = async (req, res) => {
   try {
     const { id } = req.params; // team member ID
