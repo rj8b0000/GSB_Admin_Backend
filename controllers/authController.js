@@ -203,7 +203,7 @@ exports.loginUser = async (req, res) => {
 
     console.log("📤 Twilio message sent:", twilioResponse.sid);
 
-    res.status(200).json({ message: "OTP sent successfully for login" });
+    res.status(200).json({ message: "OTP sent successfully for login", user });
   } catch (error) {
     console.error("❌ Error occurred during login:", error);
     res
