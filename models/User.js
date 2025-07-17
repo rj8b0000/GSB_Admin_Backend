@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
     subscribed: { type: Boolean, default: false },
     lastScoreUpdate: { type: Date, default: Date.now },
     verified: { type: Boolean, default: false },
+    firstTimeLogin: { type: Boolean, default: true }, // Add to userSchema
   },
   { timestamps: true }
 );

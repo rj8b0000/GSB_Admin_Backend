@@ -43,6 +43,7 @@ exports.signUp = async (req, res) => {
       otp,
       otpExpiresAt,
       verified: false,
+      firstTimeLogin: true,
     });
 
     await user.save();
@@ -157,6 +158,7 @@ exports.verifyOTP = async (req, res) => {
       message: user.verified
         ? "Signup completed successfully"
         : "Login successful",
+      isFirstTimeLogin: user.firstTimeLogin, // Include in response
       user: {
         _id: user._id,
         fullName: user.fullName,
