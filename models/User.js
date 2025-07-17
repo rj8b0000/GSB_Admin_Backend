@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema(
     flag: { type: String, enum: ["green", "yellow", "red"], default: "red" },
     subscribed: { type: Boolean, default: false },
     lastScoreUpdate: { type: Date, default: Date.now },
+    verified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

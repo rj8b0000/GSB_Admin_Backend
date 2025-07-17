@@ -1,15 +1,16 @@
 const User = require("../models/User");
 const DailyUpdate = require("../models/DailyUpdate");
-const { uploadFileToS3 } = require("../services/mockS3Uploader");
+const { uploadFileToS3 } = require("../services/s3Uploader");
 
+const multer = require("multer");
 exports.createUser = async (req, res) => {
   try {
+    console.log("Create user - Request body:", req.body);
+    console.log("Create user - Request file:", req.file);
     const { fullName, phoneNumber, age, weight, height, goal } = req.body;
-    let photoUrl = null;
-    if (req.file) {
-      // Upload image to S3 and get the URL
-      photoUrl = await uploadFileToS3(req.file, "users");
-    }
+
+    photoUrl = await uploadFileToS3(req.file, "users");
+
     const user = new User({
       fullName,
       phoneNumber,
@@ -22,16 +23,20 @@ exports.createUser = async (req, res) => {
     await user.save();
     res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
+    if (error instanceof multer.MulterError) {
+      return res.status(400).json({ error: `Multer error: ${error.message}` });
+    }
     res.status(400).json({ error: error.message });
   }
 };
 
 exports.updateUser = async (req, res) => {
   try {
-    const { id } = req.params; // Get user ID from URL parameters
+    console.log("Request body:", req.body); // Debug
+    console.log("Request file:", req.file); // Debug
+    const { id } = req.params;
     const { fullName, phoneNumber, age, weight, height, goal } = req.body;
 
-    // Prepare update object with only provided fields
     const updateData = {};
     if (fullName) updateData.fullName = fullName;
     if (phoneNumber) updateData.phoneNumber = phoneNumber;
@@ -40,16 +45,14 @@ exports.updateUser = async (req, res) => {
     if (height) updateData.height = Number(height);
     if (goal) updateData.goal = goal;
 
-    // Handle photo upload to S3 if a file is provided
     if (req.file) {
       updateData.photo = await uploadFileToS3(req.file, "users");
     }
 
-    // Find and update user by ID
     const user = await User.findByIdAndUpdate(
       id,
       { $set: updateData },
-      { new: true, runValidators: true } // Return updated document and validate schema
+      { new: true, runValidators: true }
     );
 
     if (!user) {
@@ -58,6 +61,9 @@ exports.updateUser = async (req, res) => {
 
     res.status(200).json({ message: "User updated successfully", user });
   } catch (error) {
+    if (error instanceof multer.MulterError) {
+      return res.status(400).json({ error: `Multer error: ${error.message}` });
+    }
     res.status(400).json({ error: error.message });
   }
 };

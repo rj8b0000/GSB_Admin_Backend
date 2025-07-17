@@ -1,6 +1,7 @@
 const DailyUpdate = require("../models/DailyUpdate");
 const User = require("../models/User"); // Import User model
 const { uploadFileToS3, deleteFileFromS3 } = require("../services/s3Uploader");
+const multer = require("multer");
 
 exports.addDailyUpdate = async (req, res) => {
   let imageUrl = null;

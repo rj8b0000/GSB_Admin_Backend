@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 const uploadImage = require("../middlewares/imageUploadMiddleware");
+const uploadUserImage = require("../middlewares/userImageUploadMiddleware");
 
-router.post("/create-user", uploadImage, userController.createUser);
-router.put("/update-user/:id", uploadImage, userController.updateUser);
+router.post("/create-user", uploadUserImage, userController.createUser);
+router.put("/update-user/:id", uploadUserImage, userController.updateUser);
 
 // Get user with calculated score
 router.get("/:id/score", userController.getUserWithScore);
